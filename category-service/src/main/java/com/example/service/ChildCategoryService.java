@@ -23,8 +23,8 @@ public class ChildCategoryService {
 		}
 		
 		public ApiResponse saveChildCategory(ChildCategory childCategory) {
-			SubCategory subCategory1=childCategoryRepo.findByName(childCategory.getName());
-			if(Objects.isNull(subCategory1)) {
+			ChildCategory childCategory1=childCategoryRepo.findByName(childCategory.getName());
+			if(Objects.isNull(childCategory1)) {
 			childCategoryRepo.save(childCategory);
 			apiResponse.setData(childCategory);
 			apiResponse.setStatus(HttpStatus.OK.value());
