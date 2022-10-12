@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/category-service/Meesho.iml" filepath="$PROJECT_DIR$/category-service/Meesho.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/Meesho-Project.iml" filepath="$PROJECT_DIR$/.idea/Meesho-Project.iml" />
+      <module fileurl="file://$PROJECT_DIR$/category-service/category-service.iml" filepath="$PROJECT_DIR$/category-service/category-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/product-service/product-microservice.iml" filepath="$PROJECT_DIR$/product-service/product-microservice.iml" />
     </modules>
   </component>

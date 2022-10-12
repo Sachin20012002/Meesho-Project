@@ -7,18 +7,18 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="Meesho" />
         <module name="product-microservice" />
+        <module name="category-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="Meesho" target="1.8" />
+      <module name="category-service" target="1.8" />
       <module name="product-microservice" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="Meesho" options="-parameters" />
+      <module name="category-service" options="-parameters" />
       <module name="product-microservice" options="-parameters" />
     </option>
   </component>
