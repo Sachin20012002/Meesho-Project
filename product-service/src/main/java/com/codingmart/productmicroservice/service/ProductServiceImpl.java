@@ -59,8 +59,12 @@ public class ProductServiceImpl implements ProductService{
         product.setMaximumRetailPrice(calculateMaximumRetailPrice(product.getTaxes(),product.getPrice()));
         product.setFinalDiscountedPrice(calculateFinalDiscountedPrice(product.getDiscount(),product.getPrice()));
 
-        return productRepository.save(product);
+        Product updatedProduct=productRepository.save(product);
+        updatedProduct.setCode(generateProductCode(product));
+        return productRepository.save(updatedProduct);
     }
+
+
 
     @Override
     public String deleteProduct(Long id) {
@@ -83,6 +87,10 @@ public class ProductServiceImpl implements ProductService{
             existingProduct.setName(product.getName());
         }
 
+        if(Objects.nonNull(product.getPrice())){
+            existingProduct.setPrice(product.getPrice());
+        }
+
         if(Objects.nonNull(product.getColor()) && !"".equalsIgnoreCase(product.getColor())){
             existingProduct.setName(product.getColor());
         }
@@ -96,7 +104,7 @@ public class ProductServiceImpl implements ProductService{
         }
 
         if(Objects.nonNull(product.getBrand())){
-           existingProduct.setBrand(product.getBrand());
+           existingProduct.setBrand(updateAndSaveBrand(product.getBrand()));
         }
 
         if(Objects.nonNull(product.getImages())){
@@ -104,17 +112,17 @@ public class ProductServiceImpl implements ProductService{
         }
 
         if(Objects.nonNull(product.getAvailableSizes())){
-            product.setQuantity(calculateTotalQuantityFromSizes(product.getAvailableSizes()));
+            existingProduct.setQuantity(calculateTotalQuantityFromSizes(product.getAvailableSizes()));
             existingProduct.setAvailableSizes(product.getAvailableSizes());
         }
         if(Objects.nonNull(product.getTaxes())){
-            product.setMaximumRetailPrice(calculateMaximumRetailPrice(product.getTaxes(),product.getPrice()));
-            existingProduct.setMaximumRetailPrice(product.getMaximumRetailPrice());
+            existingProduct.setMaximumRetailPrice(calculateMaximumRetailPrice(product.getTaxes(),product.getPrice()));
+            existingProduct.setTaxes(updateAndSaveTaxes(product.getTaxes()));
         }
 
         if(Objects.nonNull(product.getDiscount())){
-            product.setFinalDiscountedPrice(calculateFinalDiscountedPrice(product.getDiscount(),product.getPrice()));
-            existingProduct.setFinalDiscountedPrice((product.getFinalDiscountedPrice()));
+            existingProduct.setFinalDiscountedPrice(calculateFinalDiscountedPrice(product.getDiscount(),product.getPrice()));
+            existingProduct.setDiscount(updateAndSaveDiscount(product.getDiscount()));
         }
 
         productRepository.save(existingProduct);
@@ -213,6 +221,10 @@ public class ProductServiceImpl implements ProductService{
             return discountRepository.findByName(discount.getName());
         }
         return null;
+    }
+
+    private String generateProductCode(Product product) {
+        return product.getId()+"-"+product.getBrand().getId()+"-"+product.getChildCategoryId()+"-"+product.getSupplierId();
     }
 
 }

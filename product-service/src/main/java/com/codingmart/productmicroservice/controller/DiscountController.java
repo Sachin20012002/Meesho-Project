@@ -29,7 +29,7 @@ public class DiscountController {
         return genericResponse;
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     public GenericResponse getAllDiscounts(){
         genericResponse.setData(discountService.getAllDiscounts());
         return genericResponse;
