@@ -46,6 +46,7 @@ public class ChildCategoryService {
 			return apiResponse;
 		}
 		public ApiResponse getChildCategory() {
+		//	if(childCategoryRepo.findAll().isEmpty()) 
 			apiResponse.setData(childCategoryRepo.findAll());
 			apiResponse.setStatus(HttpStatus.OK.value());
 			apiResponse.setError(null);

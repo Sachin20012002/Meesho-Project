@@ -27,19 +27,19 @@ public class ChildCategoryController {
 		}
 		
 		@PostMapping("/savechildCategory")
-		public ApiResponse saveSubCategory(@RequestBody ChildCategory childCategory) {
+		public ApiResponse saveChildCategory(@RequestBody ChildCategory childCategory) {
 			return childCategoryService.saveChildCategory(childCategory);
 		}
-		@PostMapping("/addChildCategory")
-		public ApiResponse addSubCategory(@RequestBody List<ChildCategory> subCategories){
-			return childCategoryService.addChildCategory(subCategories);
+		@PostMapping("/saveAllChildCategory")
+		public ApiResponse saveAllChildCategory(@RequestBody List<ChildCategory> childCategories){
+			return childCategoryService.saveAllChildCategory(childCategories);
 		}
 		@GetMapping("/childCategories")
 		public ApiResponse getChildCategory(){
 			return childCategoryService.getChildCategory();
 		}
 		@GetMapping("/childCategory/{id}")
-		public ApiResponse getSubCategoryById(@PathVariable long id) {
+		public ApiResponse getChildCategoryById(@PathVariable long id) {
 			return childCategoryService.getChildCategoryById(id);
 		}
 //		@GetMapping("/ChildCategory/{name}")
@@ -47,11 +47,11 @@ public class ChildCategoryController {
 //			return childCategoryService.getChildCategoryByName(name);
 //		}
 		@PutMapping("/updateChildCategory")
-		public ApiResponse updateSubCategoy(@RequestBody ChildCategory subCategory) {
-			return childCategoryService.updateChildCategory(subCategory);
+		public ApiResponse updateChildCategoy(@RequestBody ChildCategory childCategory) {
+			return childCategoryService.updateChildCategory(childCategory);
 		}
 		@DeleteMapping("/deletechildCategory/{id}")
-		public ApiResponse deleteSubCategory(@PathVariable long id) {
+		public ApiResponse deleteChildCategory(@PathVariable long id) {
 			return childCategoryService.deletechildCategory(id);
 		}
 	}

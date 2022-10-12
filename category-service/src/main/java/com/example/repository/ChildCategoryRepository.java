@@ -7,6 +7,6 @@ import com.example.entity.SubCategory;
 
 public interface ChildCategoryRepository extends JpaRepository<ChildCategory, Long> {
 
-	SubCategory findByName(String name);
+	ChildCategory findByName(String name);
 
 }
