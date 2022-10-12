@@ -38,7 +38,7 @@ public class ChildCategoryService {
 			return apiResponse;
 		}
 		
-		public ApiResponse addChildCategory(List<ChildCategory> childCategory){
+		public ApiResponse saveAllChildCategory(List<ChildCategory> childCategory){
 			childCategoryRepo.saveAll(childCategory);
 			apiResponse.setData(childCategory);
 			apiResponse.setStatus(HttpStatus.OK.value());
