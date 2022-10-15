@@ -52,7 +52,7 @@ public class ChildCategoryService {
 		public ApiResponse getAllChildCategory() {
 			 List<ChildCategory> childCategory=childCategoryRepo.findAll();
 			 if(childCategory.isEmpty()) {
-				 throw new IdNotFound("no Categories Present");
+				 throw new IdNotFound("no ChildCategories Present");
 			 }
 			apiResponse.setData(childCategoryRepo.findAll());
 			apiResponse.setStatus(HttpStatus.OK.value());
