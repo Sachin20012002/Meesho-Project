@@ -1,6 +1,5 @@
 package com.example.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -10,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.example.entity.SubCategory;
 import com.example.repository.SubCategoryRepository;
 import com.example.response.ApiResponse;
+import com.example.response.IdNotFound;
 
 @Service
 public class SubCategoryService {
@@ -52,6 +52,9 @@ public class SubCategoryService {
 		return apiResponse;
 	}
 	public ApiResponse gesubCategoryById(long id) {
+		if(subCategoryRepo.findById(id).isEmpty()) {
+			 throw new IdNotFound("Product Id not Found");
+		}
 		SubCategory s=subCategoryRepo.findById(id).get();
 		apiResponse.setData(s);
 		apiResponse.setStatus(HttpStatus.OK.value());
@@ -66,7 +69,9 @@ public class SubCategoryService {
 //		return apiResponse;
 //	}
 	public ApiResponse updateSubCategory(SubCategory subCategory) {
-		
+		if(subCategoryRepo.findById(subCategory.getId()).isEmpty()) {
+			throw new IdNotFound("Id not found to update");
+		}
 		SubCategory existing=subCategoryRepo.findById(subCategory.getId()).get();
 		existing.setName(subCategory.getName());
 		existing.setActive(subCategory.isActive());
@@ -76,6 +81,9 @@ public class SubCategoryService {
 		   return apiResponse;
 	}
 	public ApiResponse deleteSubCategory(long id) {
+		if(subCategoryRepo.findById(id).isEmpty()) {
+			 throw new IdNotFound("Product Id not Found");
+		}
 		 subCategoryRepo.deleteById(id);
 		 String mes=" Id "+ id +" Deleted Successfully";
 		 apiResponse.setData(mes);
@@ -87,6 +95,9 @@ public class SubCategoryService {
 	//fetching all data 
 	
 	public ApiResponse getAllSubCategoriesFromCategoryId(long id){
+		if(subCategoryRepo.getAllSubCategoriesFromCategoryId(id).isEmpty()) {
+			 throw new IdNotFound("No SubCategory found for the given Category Id");
+		}
 		List<SubCategory> sb=subCategoryRepo.getAllSubCategoriesFromCategoryId(id);
 			apiResponse.setData(sb);
 			apiResponse.setStatus(HttpStatus.OK.value());

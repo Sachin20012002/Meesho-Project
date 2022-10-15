@@ -12,16 +12,20 @@ public class GlobalException {
 	@Autowired
 	private ApiResponse apiResponse;
 	
+
 	@ExceptionHandler
-	public ResponseEntity handleException(Exception e) {
+	public ResponseEntity<ApiResponse> handleBadRequestException(IdNotFound e) {
+		apiResponse.setStatus(HttpStatus.NOT_FOUND.value());
+		apiResponse.setData(null);
+		apiResponse.setError(e.getMessage());
+		return ResponseEntity.status(HttpStatus.NOT_FOUND.value()).body(apiResponse);
+	}
+	
+	@ExceptionHandler
+	public ResponseEntity<ApiResponse> handleException(Exception e) {
 		apiResponse.setError("Internal Server Error");
 		apiResponse.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR.value()).body(apiResponse);
 	}
 	
-//	@ExceptionHandler
-//	public ResponseEntity IdNotFound() {
-//		apiResponse.setStatus(HttpStatus.NOT_FOUND.value());
-//		return ResponseEntity.status(HttpStatus.NOT_FOUND.value()).body(apiResponse);
-//	}
 }

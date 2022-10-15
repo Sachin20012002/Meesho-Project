@@ -5,10 +5,14 @@ import java.util.Objects;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import com.codingmart.productmicroservice.entity.Product;
+import com.codingmart.productmicroservice.exception.NotFoundException;
 import com.example.entity.ChildCategory;
 import com.example.entity.SubCategory;
 import com.example.repository.ChildCategoryRepository;
 import com.example.response.ApiResponse;
+import com.example.response.IdNotFound;
 
 @Service
 public class ChildCategoryService {
@@ -45,8 +49,11 @@ public class ChildCategoryService {
 			apiResponse.setError(null);
 			return apiResponse;
 		}
-		public ApiResponse getChildCategory() {
-		//	if(childCategoryRepo.findAll().isEmpty()) 
+		public ApiResponse getAllChildCategory() {
+			 List<ChildCategory> childCategory=childCategoryRepo.findAll();
+			 if(childCategory.isEmpty()) {
+				 throw new IdNotFound("no Categories Present");
+			 }
 			apiResponse.setData(childCategoryRepo.findAll());
 			apiResponse.setStatus(HttpStatus.OK.value());
 			apiResponse.setError(null);
@@ -54,6 +61,9 @@ public class ChildCategoryService {
 		}
 		
 		public ApiResponse getChildCategoryById(long id) {
+			if(childCategoryRepo.findById(id).isEmpty()) {
+				 throw new IdNotFound("Product Id not Found");
+			}
 			ChildCategory cc=childCategoryRepo.findById(id).get();
 			
 				boolean status=cc.isActive();
@@ -80,6 +90,9 @@ public class ChildCategoryService {
 //			return apiResponse;
 //		}
 		public ApiResponse updateChildCategory(ChildCategory childCategory) {
+			 if(childCategoryRepo.findById(childCategory.getId()).isEmpty()){
+		            throw new IdNotFound("Product Id not Found");
+		       }
 			ChildCategory existingChild=childCategoryRepo.findById(childCategory.getId()).get();
 			existingChild.setName(childCategory.getName());
 			existingChild.setActive(childCategory.isActive());
@@ -89,6 +102,9 @@ public class ChildCategoryService {
 			   return apiResponse;
 		}
 		public ApiResponse deletechildCategory(long id) {
+			if(childCategoryRepo.findById(id).isEmpty()) {
+				 throw new IdNotFound("Product Id not Found");
+			}
 			childCategoryRepo.deleteById(id);
 			String msg="Id "+ id +" Deleted Successfully";
 			apiResponse.setData(msg);

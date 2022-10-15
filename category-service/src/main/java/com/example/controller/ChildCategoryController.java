@@ -19,8 +19,6 @@ public class ChildCategoryController {
 
 		private ChildCategoryService childCategoryService;
 		
-		
-		
 		public ChildCategoryController(ChildCategoryService childCategoryService) {
 			this.childCategoryService=childCategoryService;
 			
@@ -35,8 +33,8 @@ public class ChildCategoryController {
 			return childCategoryService.saveAllChildCategory(childCategories);
 		}
 		@GetMapping("/childCategories")
-		public ApiResponse getChildCategory(){
-			return childCategoryService.getChildCategory();
+		public ApiResponse getAllChildCategory(){
+			return childCategoryService.getAllChildCategory();
 		}
 		@GetMapping("/childCategory/{id}")
 		public ApiResponse getChildCategoryById(@PathVariable long id) {
