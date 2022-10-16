@@ -165,10 +165,20 @@ public class ProductServiceImpl implements ProductService{
         return productRepository.findAllByColor(color);
     }
 
+    @Override
+    public List<Product> getAllActiveProducts() {
+        return productRepository.findAllByActive(true);
+    }
+
+    @Override
+    public List<Product> getAllActiveProductsByChildCategoryId(Long id) {
+        return productRepository.findAllByActiveAndChildCategoryId(true,id);
+    }
+
     private Long calculateTotalQuantityFromSizes(List<Size> availableSizes) {
         Long quantity=0L;
         for(Size i:availableSizes){
-            quantity+=i.getQuantity();
+            if(i.getActive()) quantity+=i.getQuantity();
         }
         return quantity;
     }
@@ -176,13 +186,13 @@ public class ProductServiceImpl implements ProductService{
     private Double calculateMaximumRetailPrice(List<Tax> taxes, Double price) {
         Double maximumRetailPrice=price;
         for(Tax i:taxes) {
-            maximumRetailPrice += ((i.getPercent() / 100.0) * price);
+            if(i.getActive()) maximumRetailPrice += ((i.getPercent() / 100.0) * price);
         }
         return maximumRetailPrice;
     }
 
     private Double calculateFinalDiscountedPrice(Discount discount, Double price) {
-        if(Objects.isNull(discount)){
+        if(Objects.isNull(discount) || !discount.getActive()){
             return price;
         }
         return price-(price*discount.getPercent()/100.0);

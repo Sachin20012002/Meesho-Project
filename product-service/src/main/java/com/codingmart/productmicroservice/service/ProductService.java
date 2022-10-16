@@ -25,4 +25,8 @@ public interface ProductService {
     List<Product> getAllProducts();
 
     List<Product> getAllProductsByColor(String color);
+
+    List<Product> getAllActiveProducts();
+
+    List<Product> getAllActiveProductsByChildCategoryId(Long id);
 }

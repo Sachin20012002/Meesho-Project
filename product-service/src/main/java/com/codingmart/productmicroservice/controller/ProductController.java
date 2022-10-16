@@ -79,5 +79,15 @@ public class ProductController {
         return genericResponse;
      }
 
+     @GetMapping("/active")
+    public GenericResponse getAllActiveProducts(){
+        genericResponse.setData(productService.getAllActiveProducts());
+        return genericResponse;
+    }
 
+    @GetMapping("/child-category/active/{id}")
+    public GenericResponse getAllActiveProductsByChildCategoryId(@PathVariable("id") Long id){
+        genericResponse.setData(productService.getAllActiveProductsByChildCategoryId(id));
+        return genericResponse;
+    }
 }
