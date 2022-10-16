@@ -7,8 +7,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.example.entity.Category;
+import com.example.entity.ChildCategory;
 import com.example.repository.CategoryRepository;
 import com.example.response.ApiResponse;
+import com.example.response.IdNotFound;
 
 @Service
 public class CategoryService {
@@ -47,6 +49,10 @@ public class CategoryService {
 	}
 
 	public ApiResponse getAllCategories() {
+		List<Category> category=categoryRepo.findAll();
+		 if(category.isEmpty()) {
+			 throw new IdNotFound("no Categories Present");
+		 }
 		apiResponse.setData(categoryRepo.findAll());
 		apiResponse.setStatus(HttpStatus.OK.value());
 		apiResponse.setError(null);
@@ -54,7 +60,9 @@ public class CategoryService {
 	}
 	
 	public ApiResponse getCategoryById(long id) {
-		
+		if(categoryRepo.findById(id).isEmpty()) {
+			 throw new IdNotFound("Category Id not Found");
+		}
 		Category c = categoryRepo.findById(id).get();
 		apiResponse.setData(c);
 		apiResponse.setStatus(HttpStatus.OK.value());
@@ -72,6 +80,9 @@ public class CategoryService {
 //	}
 	 
 	public ApiResponse UpdateCategory(Category category) {
+		 if(categoryRepo.findById(category.getId()).isEmpty()){
+	            throw new IdNotFound("Category Id not Found to update");
+	       }
 		Category exist=categoryRepo.findById(category.getId()).get();
 		exist.setName(category.getName());
 		exist.setActive(category.isActive());	
@@ -82,6 +93,9 @@ public class CategoryService {
 	}
 
 	public ApiResponse deleteCategory(long id) {
+		if(categoryRepo.findById(id).isEmpty()) {
+			 throw new IdNotFound("Category Id not Found");
+		}
 		categoryRepo.deleteById(id);
 		String msg="Id "+ id +" Deleted Successfully";
 		apiResponse.setData(msg);
@@ -92,6 +106,9 @@ public class CategoryService {
 	
 	
      public ApiResponse getActiveCategoryById(Long id){
+    	 if(categoryRepo.findById(id).isEmpty()) {
+			 throw new IdNotFound("Category Id not Found");
+		}
     	 Category cy=categoryRepo.getActiveCategoryById(id);
     	 boolean status=cy.isActive();
     	if(status==true) {

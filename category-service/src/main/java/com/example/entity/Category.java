@@ -39,7 +39,6 @@ public class Category {
 		this.name = name;
 	}
 	
-	
 	public boolean isActive() {
 		return active;
 	}
@@ -47,7 +46,6 @@ public class Category {
 		this.active = active;
 	}
 	
-
 	@Override
 	public String toString() {
 		return "Category [id=" + id + ", name=" + name + ", active=" + active + ", subCategory=" + subCategory + "]";
