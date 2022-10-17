@@ -16,7 +16,7 @@ import com.codingmart.categorymicroservice.response.ApiResponse;
 import com.codingmart.categorymicroservice.service.SubCategoryService;
 
 @RestController
-@RequestMapping("/SubCategory")
+@RequestMapping("/SubCategories")
 public class SubCategoryController {
 	
 	private SubCategoryService subCategoryService;

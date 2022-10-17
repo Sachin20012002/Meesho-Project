@@ -16,7 +16,7 @@ import com.codingmart.categorymicroservice.response.ApiResponse;
 import com.codingmart.categorymicroservice.service.CategoryService;
 
 @RestController
-@RequestMapping("/category")
+@RequestMapping("/categories")
 public class CategoryController {
 
 	private CategoryService categoryService;
