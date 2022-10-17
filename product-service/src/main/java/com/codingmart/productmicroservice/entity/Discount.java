@@ -31,9 +31,10 @@ public class Discount extends Auditable{
     private Double percent;
     @NotNull(message = "Provide active status")
     private Boolean active;
-    @JsonIgnore
-    @OneToOne(mappedBy = "discount")
-    private Product product;
+
+//    @JsonIgnore
+//    @OneToOne(mappedBy = "discount")
+//    private Product product;
 
     @Override
     public boolean equals(Object o) {
