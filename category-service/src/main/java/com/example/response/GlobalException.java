@@ -1,6 +1,5 @@
 package com.example.response;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -9,9 +8,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalException {
 	
-	@Autowired
-	private ApiResponse apiResponse;
 	
+	private ApiResponse apiResponse;
+    
+	public  GlobalException(ApiResponse apiResponse) {
+		this.apiResponse=apiResponse;
+	}
 
 	@ExceptionHandler
 	public ResponseEntity<ApiResponse> handleBadRequestException(IdNotFound e) {

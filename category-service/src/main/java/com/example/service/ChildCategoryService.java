@@ -6,10 +6,7 @@ import java.util.Objects;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.codingmart.productmicroservice.entity.Product;
-import com.codingmart.productmicroservice.exception.NotFoundException;
 import com.example.entity.ChildCategory;
-import com.example.entity.SubCategory;
 import com.example.repository.ChildCategoryRepository;
 import com.example.response.ApiResponse;
 import com.example.response.IdNotFound;

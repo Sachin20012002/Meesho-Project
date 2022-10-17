@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.entity.ChildCategory;
@@ -15,6 +16,7 @@ import com.example.response.ApiResponse;
 import com.example.service.ChildCategoryService;
 
 @RestController
+@RequestMapping("/ChildCategory")
 public class ChildCategoryController {
 
 		private ChildCategoryService childCategoryService;
@@ -24,7 +26,7 @@ public class ChildCategoryController {
 			
 		}
 		
-		@PostMapping("/savechildCategory")
+		@PostMapping()
 		public ApiResponse saveChildCategory(@RequestBody ChildCategory childCategory) {
 			return childCategoryService.saveChildCategory(childCategory);
 		}
@@ -32,11 +34,11 @@ public class ChildCategoryController {
 		public ApiResponse saveAllChildCategory(@RequestBody List<ChildCategory> childCategories){
 			return childCategoryService.saveAllChildCategory(childCategories);
 		}
-		@GetMapping("/childCategories")
+		@GetMapping()
 		public ApiResponse getAllChildCategory(){
 			return childCategoryService.getAllChildCategory();
 		}
-		@GetMapping("/childCategory/{id}")
+		@GetMapping("/{id}")
 		public ApiResponse getChildCategoryById(@PathVariable long id) {
 			return childCategoryService.getChildCategoryById(id);
 		}
@@ -44,11 +46,11 @@ public class ChildCategoryController {
 //		public ApiResponse getChildCategoryByName(@PathVariable String name) {
 //			return childCategoryService.getChildCategoryByName(name);
 //		}
-		@PutMapping("/updateChildCategory")
+		@PutMapping()
 		public ApiResponse updateChildCategoy(@RequestBody ChildCategory childCategory) {
 			return childCategoryService.updateChildCategory(childCategory);
 		}
-		@DeleteMapping("/deletechildCategory/{id}")
+		@DeleteMapping("/{id}")
 		public ApiResponse deleteChildCategory(@PathVariable long id) {
 			return childCategoryService.deletechildCategory(id);
 		}

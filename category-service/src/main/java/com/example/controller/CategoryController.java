@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.entity.Category;
@@ -15,6 +16,7 @@ import com.example.response.ApiResponse;
 import com.example.service.CategoryService;
 
 @RestController
+@RequestMapping("/category")
 public class CategoryController {
 
 	private CategoryService categoryService;
@@ -23,7 +25,7 @@ public class CategoryController {
 		this.categoryService=categoryService;
 	}
 
-	@PostMapping("/saveCategory")
+	@PostMapping()
 	public ApiResponse saveCategory(@RequestBody Category category) {
 		return categoryService.saveCategory(category);
 	}
@@ -33,12 +35,12 @@ public class CategoryController {
 		return categoryService.saveAllCategory(categories);
 	}
 
-	@GetMapping("/getAllCategories")
+	@GetMapping()
 	public ApiResponse getAllCategory(){
 		return categoryService.getAllCategories();
 		}
 	
-	@GetMapping("/getCategoryById/{id}")
+	@GetMapping("/{id}")
 	public ApiResponse getCategoryById(@PathVariable long id) {
 	 return categoryService.getCategoryById(id);
 		}
@@ -47,11 +49,13 @@ public class CategoryController {
 //	public ApiResponse getCategoryByName(@PathVariable String name) {
 //		return categoryService.getCategoryByName(name);
 //	}
-	@PutMapping("/UpdateMapping")
+	
+	
+	@PutMapping()
 	public ApiResponse updateCategory(@RequestBody Category category) {
 		return categoryService.UpdateCategory(category);
 	}
-	@DeleteMapping("/delete/{id}")
+	@DeleteMapping("/{id}")
 	public ApiResponse deleteCategory(@PathVariable long id)
 	{
 		return categoryService.deleteCategory(id);

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.entity.SubCategory;
@@ -15,6 +16,7 @@ import com.example.response.ApiResponse;
 import com.example.service.SubCategoryService;
 
 @RestController
+@RequestMapping("/SubCategory")
 public class SubCategoryController {
 	
 	private SubCategoryService subCategoryService;
@@ -23,7 +25,7 @@ public class SubCategoryController {
 		this.subCategoryService=subCategoryService;
 	}
 	
-	@PostMapping("/saveSubCategory")
+	@PostMapping()
 	public ApiResponse saveSubCategory(@RequestBody SubCategory subCategory) {
 		return subCategoryService.saveSubCategory(subCategory);
 	}
@@ -31,11 +33,11 @@ public class SubCategoryController {
 	public ApiResponse saveAllSubCategory(@RequestBody List<SubCategory> subCategories){
 		return subCategoryService.saveAllSubCategory(subCategories);
 	}
-	@GetMapping("/getAllSubCategory")
+	@GetMapping()
 	public ApiResponse getAllSubCategory(){
 		return subCategoryService.getAllSubCategory();
 	}
-	@GetMapping("/getSubCategoryById/{id}")
+	@GetMapping("/{id}")
 	public ApiResponse getSubCategoryById(@PathVariable long id) {
 		return subCategoryService.gesubCategoryById(id);
 	}
@@ -43,11 +45,11 @@ public class SubCategoryController {
 //	public ApiResponse getSubCategoryByName(@PathVariable String name) {
 //		return subCategoryService.getsubCategoryByName(name);
 //	}
-	@PutMapping("/updateSubCategory")
+	@PutMapping()
 	public ApiResponse updateSubCategoy(@RequestBody SubCategory subCategory) {
 		return subCategoryService.updateSubCategory(subCategory);
 	}
-	@DeleteMapping("/deleteSubCategory/{id}")
+	@DeleteMapping("/{id}")
 	public ApiResponse deleteSubCategory(@PathVariable long id) {
 		return subCategoryService.deleteSubCategory(id);
 	}
