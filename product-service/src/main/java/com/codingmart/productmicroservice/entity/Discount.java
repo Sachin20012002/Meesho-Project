@@ -1,7 +1,7 @@
 package com.codingmart.productmicroservice.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.codingmart.productmicroservice.audit.Auditable;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -18,7 +18,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Discount extends Auditable{
+public class Discount extends Auditable<String> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

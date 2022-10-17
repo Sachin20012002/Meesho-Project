@@ -1,14 +1,15 @@
 package com.codingmart.productmicroservice;
 
-import com.codingmart.productmicroservice.custom.GenericResponse;
+import com.codingmart.productmicroservice.audit.AuditorAwareImpl;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
-@EnableJpaAuditing
+@EnableJpaAuditing(auditorAwareRef = "auditorAware")
 public class ProductServiceApplication {
 
 	public static void main(String[] args) {
@@ -19,9 +20,15 @@ public class ProductServiceApplication {
 	public RestTemplate restTemplate(){
 		return new RestTemplate();
 	}
-    @Bean
-	public GenericResponse genericResponse(){
-		return new GenericResponse();
+
+	@Bean
+	public AuditorAware<String> auditorAware(){
+		return new AuditorAwareImpl();
 	}
+//    @Bean
+//	public GenericResponse genericResponse(){
+//		return new GenericResponse();
+//	}
+
 
 }

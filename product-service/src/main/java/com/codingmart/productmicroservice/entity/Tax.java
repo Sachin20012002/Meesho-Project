@@ -1,6 +1,7 @@
 package com.codingmart.productmicroservice.entity;
 
 
+import com.codingmart.productmicroservice.audit.Auditable;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -18,7 +19,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Tax extends Auditable{
+public class Tax extends Auditable<String> {
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;

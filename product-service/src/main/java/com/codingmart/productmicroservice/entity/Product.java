@@ -1,5 +1,6 @@
 package com.codingmart.productmicroservice.entity;
 
+import com.codingmart.productmicroservice.audit.Auditable;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -19,7 +20,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @Builder
 @EntityListeners(AuditingEntityListener.class)
-public class Product extends Auditable{
+public class Product extends Auditable<String> {
     @Id
     @GeneratedValue
     private Long id;

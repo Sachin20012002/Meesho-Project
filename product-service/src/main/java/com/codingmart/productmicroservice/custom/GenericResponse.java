@@ -3,9 +3,11 @@ package com.codingmart.productmicroservice.custom;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
 
 @Getter
 @Setter
+@Component
 public class GenericResponse {
         private Integer code;
         private HttpStatus status;

@@ -1,6 +1,7 @@
 package com.codingmart.productmicroservice.entity;
 
 
+import com.codingmart.productmicroservice.audit.Auditable;
 import lombok.*;
 import org.hibernate.validator.constraints.URL;
 
@@ -15,7 +16,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Image extends Auditable{
+public class Image extends Auditable<String> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

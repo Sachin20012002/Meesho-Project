@@ -1,10 +1,10 @@
 package com.codingmart.productmicroservice.entity;
 
 
+import com.codingmart.productmicroservice.audit.Auditable;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.AssertFalse;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @Builder
 
-public class Brand extends Auditable{
+public class Brand extends Auditable<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
