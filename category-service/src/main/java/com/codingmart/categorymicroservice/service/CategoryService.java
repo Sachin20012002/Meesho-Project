@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Objects;
 
 import com.codingmart.categorymicroservice.entity.Category;
+import com.codingmart.categorymicroservice.entity.SubCategory;
 import com.codingmart.categorymicroservice.repository.CategoryRepository;
+import com.codingmart.categorymicroservice.repository.SubCategoryRepository;
 import com.codingmart.categorymicroservice.response.ApiResponse;
 import com.codingmart.categorymicroservice.response.IdNotFound;
 import org.springframework.http.HttpStatus;
@@ -14,11 +16,13 @@ import org.springframework.stereotype.Service;
 public class CategoryService {
 
 	private CategoryRepository categoryRepo;
+	private SubCategoryRepository subCategoryRepo;
 	private ApiResponse apiResponse;
 	
-	public CategoryService(CategoryRepository categoryRepo,ApiResponse apiResponse) {
+	public CategoryService(CategoryRepository categoryRepo,ApiResponse apiResponse,SubCategoryRepository subCategoryRepo) {
 		this.categoryRepo=categoryRepo;
 		this.apiResponse=apiResponse;
+		this.subCategoryRepo=subCategoryRepo;
 	}
 	
 
@@ -86,11 +90,11 @@ public class CategoryService {
 //		return apiResponse;
 //	}
 	 
-	public ApiResponse UpdateCategory(Category category) {
-		 if(categoryRepo.findById(category.getId()).isEmpty()){
+	public ApiResponse UpdateCategory(Category category,Long id) {
+		 if(categoryRepo.findById(id).isEmpty()){
 	            throw new IdNotFound("Category Id not Found to update");
 	       }
-		Category exist=categoryRepo.findById(category.getId()).get();
+		Category exist=categoryRepo.findById(id).get();
 		exist.setName(category.getName());
 		exist.setActive(category.isActive());	
 		apiResponse.setData(categoryRepo.save(exist));
@@ -130,4 +134,13 @@ public class CategoryService {
     		 }
     	 return apiResponse;
      }
+
+	public ApiResponse saveSubCategoryForCategory(SubCategory subCategory, long id) {
+		Category category = categoryRepo.findById(id).get();
+		category.getSubCategory().add(subCategoryRepo.save(subCategory));
+		apiResponse.setData(categoryRepo.save(category));
+		apiResponse.setError(null);
+		apiResponse.setStatus(HttpStatus.OK.value());
+		return  apiResponse;
+	}
 }

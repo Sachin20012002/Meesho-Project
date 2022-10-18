@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.codingmart.categorymicroservice.entity.Category;
 import com.codingmart.categorymicroservice.entity.SubCategory;
 import com.codingmart.categorymicroservice.repository.ChildCategoryRepository;
 import com.codingmart.categorymicroservice.repository.SubCategoryRepository;
@@ -47,9 +48,19 @@ public class ChildCategoryService {
 			return apiResponse;
 		}
 		
-		public ApiResponse saveAllChildCategory(List<ChildCategory> childCategory){
-			childCategoryRepo.saveAll(childCategory);
-			apiResponse.setData(childCategory);
+		public ApiResponse saveAllChildCategory(List<ChildCategory> childCategories){
+			for(ChildCategory childCategory : childCategories)
+			{
+				ChildCategory childCategory1=childCategoryRepo.findByName(childCategory.getName());
+				if(Objects.isNull(childCategory1)) {
+					childCategoryRepo.save(childCategory);
+				}
+				else {
+					continue;
+				}
+			}
+			//childCategoryRepo.saveAll(childCategories);
+			apiResponse.setData(childCategories);
 			apiResponse.setStatus(HttpStatus.OK.value());
 			apiResponse.setError(null);
 			return apiResponse;
@@ -94,11 +105,11 @@ public class ChildCategoryService {
 		//apiResponse.setError(null);
 //			return apiResponse;
 //		}
-		public ApiResponse updateChildCategory(ChildCategory childCategory) {
-			 if(childCategoryRepo.findById(childCategory.getId()).isEmpty()){
+		public ApiResponse updateChildCategory(ChildCategory childCategory,Long id) {
+			 if(childCategoryRepo.findById(id).isEmpty()){
 		            throw new IdNotFound("Product Id not Found");
 		       }
-			ChildCategory existingChild=childCategoryRepo.findById(childCategory.getId()).get();
+			ChildCategory existingChild=childCategoryRepo.findById(id).get();
 			existingChild.setName(childCategory.getName());
 			existingChild.setActive(childCategory.isActive());
 			apiResponse.setData(childCategoryRepo.save(existingChild));

@@ -10,12 +10,10 @@ public class ApiResponse {
 	private Object data;
 	private Object error;
 	
-	
-	
 	public ApiResponse() {
 		super();
 		this.status = HttpStatus.OK.value();
-		this.data = data;
+		this.data = null;
 		this.error = null;
 	}
 	

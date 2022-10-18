@@ -2,6 +2,7 @@ package com.codingmart.categorymicroservice.controller;
 
 import java.util.List;
 
+import com.codingmart.categorymicroservice.entity.SubCategory;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,9 +52,10 @@ public class CategoryController {
 //	}
 	
 	
-	@PutMapping()
-	public ApiResponse updateCategory(@RequestBody Category category) {
-		return categoryService.UpdateCategory(category);
+	@PutMapping("/{id}")
+	public ApiResponse updateCategory(@RequestBody Category category,@PathVariable("id")Long id) {
+
+		return categoryService.UpdateCategory(category,id);
 	}
 	@DeleteMapping("/{id}")
 	public ApiResponse deleteCategory(@PathVariable long id)
@@ -65,5 +67,8 @@ public class CategoryController {
 	public ApiResponse getActiveCategoryById(@PathVariable long id){
 		return categoryService.getActiveCategoryById(id);
 	}
-	
+	@PostMapping("/{id}")
+	public ApiResponse saveSubCategoryForCategory(@RequestBody SubCategory subCategory,@PathVariable long id){
+		return categoryService.saveSubCategoryForCategory(subCategory,id);
+	}
 }

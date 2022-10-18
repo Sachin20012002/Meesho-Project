@@ -2,6 +2,7 @@ package com.codingmart.categorymicroservice.controller;
 
 import java.util.List;
 
+import com.codingmart.categorymicroservice.entity.ChildCategory;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,9 +46,9 @@ public class SubCategoryController {
 //	public ApiResponse getSubCategoryByName(@PathVariable String name) {
 //		return subCategoryService.getsubCategoryByName(name);
 //	}
-	@PutMapping()
-	public ApiResponse updateSubCategory(@RequestBody SubCategory subCategory) {
-		return subCategoryService.updateSubCategory(subCategory);
+	@PutMapping("/{id}")
+	public ApiResponse updateSubCategory(@RequestBody SubCategory subCategory ,@PathVariable("id") Long id) {
+		return subCategoryService.updateSubCategory(subCategory,id);
 	}
 	@DeleteMapping("/{id}")
 	public ApiResponse deleteSubCategory(@PathVariable long id) {
@@ -57,5 +58,10 @@ public class SubCategoryController {
 	@GetMapping("/getAllSubCategoriesFromCategoryId/{id}")
 	public ApiResponse getAllSubCategoriesFromCategoryId(@PathVariable long id){
 		return subCategoryService.getAllSubCategoriesFromCategoryId(id);
+	}
+
+	@PostMapping("/{id}")
+	public ApiResponse saveChildCategoryForSubcategory(@RequestBody ChildCategory childCategory, @PathVariable long id){
+		return subCategoryService.saveChildCategoryForSubcategory(childCategory,id);
 	}
 }

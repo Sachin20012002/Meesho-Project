@@ -46,9 +46,9 @@ public class ChildCategoryController {
 //		public ApiResponse getChildCategoryByName(@PathVariable String name) {
 //			return childCategoryService.getChildCategoryByName(name);
 //		}
-		@PutMapping()
-		public ApiResponse updateChildCategoy(@RequestBody ChildCategory childCategory) {
-			return childCategoryService.updateChildCategory(childCategory);
+		@PutMapping("/{id}")
+		public ApiResponse updateChildCategoy(@RequestBody ChildCategory childCategory,@PathVariable Long id) {
+			return childCategoryService.updateChildCategory(childCategory,id);
 		}
 		@DeleteMapping("/{id}")
 		public ApiResponse deleteChildCategory(@PathVariable long id) {
