@@ -38,6 +38,7 @@ public class SubCategoryService {
 	}
 	
 	public ApiResponse saveAllSubCategory(List<SubCategory> subCategory){
+
 		subCategoryRepo.saveAll(subCategory);
 		apiResponse.setData(subCategory);
 		apiResponse.setStatus(HttpStatus.OK.value());
@@ -50,7 +51,7 @@ public class SubCategoryService {
 		apiResponse.setError(null);
 		return apiResponse;
 	}
-	public ApiResponse gesubCategoryById(long id) {
+	public ApiResponse getSubCategoryById(long id) {
 		if(subCategoryRepo.findById(id).isEmpty()) {
 			 throw new IdNotFound("Product Id not Found");
 		}

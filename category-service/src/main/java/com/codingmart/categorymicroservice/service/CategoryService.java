@@ -38,20 +38,29 @@ public class CategoryService {
 		return apiResponse;
 	}
 	
-	public ApiResponse saveAllCategory(List<Category> category){
-		categoryRepo.saveAll(category);
-		apiResponse.setData(category);
+	public ApiResponse saveAllCategory(List<Category> categories){
+		for(Category category : categories)
+		{
+			Category category1=categoryRepo.findByName(category.getName());
+			if(Objects.isNull(category1)) {
+				categoryRepo.save(category);
+			}
+			else {
+				continue;
+			}
+		}
+		apiResponse.setData(categories);
 		apiResponse.setStatus(HttpStatus.OK.value());
 		apiResponse.setError(null);
 		return apiResponse;
 	}
 
 	public ApiResponse getAllCategories() {
-		List<Category> category=categoryRepo.findAll();
-		 if(category.isEmpty()) {
+		List<Category> categories=categoryRepo.findAll();
+		 if(categories.isEmpty()) {
 			 throw new IdNotFound("no Categories Present");
 		 }
-		apiResponse.setData(categoryRepo.findAll());
+		apiResponse.setData(categories);
 		apiResponse.setStatus(HttpStatus.OK.value());
 		apiResponse.setError(null);
 		return apiResponse;
@@ -117,7 +126,7 @@ public class CategoryService {
     	 else {
     		 apiResponse.setData(null);
     		 apiResponse.setStatus(HttpStatus.OK.value());
-    		 apiResponse.setError("category is not active ");
+    		 apiResponse.setError("category is inactive ");
     		 }
     	 return apiResponse;
      }

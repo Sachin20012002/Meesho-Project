@@ -38,7 +38,7 @@ public class ChildCategoryController {
 		public ApiResponse getAllChildCategory(){
 			return childCategoryService.getAllChildCategory();
 		}
-		@GetMapping("/{id}")
+		@GetMapping("/get/{id}")
 		public ApiResponse getChildCategoryById(@PathVariable long id) {
 			return childCategoryService.getChildCategoryById(id);
 		}
