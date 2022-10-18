@@ -1,9 +1,13 @@
 package com.codingmart.categorymicroservice.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.codingmart.categorymicroservice.entity.SubCategory;
 import com.codingmart.categorymicroservice.repository.ChildCategoryRepository;
+import com.codingmart.categorymicroservice.repository.SubCategoryRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +21,11 @@ public class ChildCategoryService {
 
 		private ChildCategoryRepository childCategoryRepo;
 		private ApiResponse apiResponse;
-		
+
+
+
+	    @Autowired
+		private  SubCategoryRepository subCategoryRepo;
 		public ChildCategoryService(ChildCategoryRepository childCategoryRepo,ApiResponse apiResponse) {
 			this.childCategoryRepo=childCategoryRepo;
 			this.apiResponse=apiResponse;
@@ -26,10 +34,10 @@ public class ChildCategoryService {
 		public ApiResponse saveChildCategory(ChildCategory childCategory) {
 			ChildCategory childCategory1=childCategoryRepo.findByName(childCategory.getName());
 			if(Objects.isNull(childCategory1)) {
-			childCategoryRepo.save(childCategory);
-			apiResponse.setData(childCategory);
-			apiResponse.setStatus(HttpStatus.OK.value());
-			apiResponse.setError(null);
+				childCategoryRepo.save(childCategory);
+			    apiResponse.setData(childCategory);
+				apiResponse.setStatus(HttpStatus.OK.value());
+				apiResponse.setError(null);
 			}
 			else {
 				apiResponse.setStatus(HttpStatus.OK.value());

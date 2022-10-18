@@ -39,14 +39,14 @@ public class SubCategoryController {
 	}
 	@GetMapping("/{id}")
 	public ApiResponse getSubCategoryById(@PathVariable long id) {
-		return subCategoryService.gesubCategoryById(id);
+		return subCategoryService.getSubCategoryById(id);
 	}
 //	@GetMapping("/subCategory/{name}")
 //	public ApiResponse getSubCategoryByName(@PathVariable String name) {
 //		return subCategoryService.getsubCategoryByName(name);
 //	}
 	@PutMapping()
-	public ApiResponse updateSubCategoy(@RequestBody SubCategory subCategory) {
+	public ApiResponse updateSubCategory(@RequestBody SubCategory subCategory) {
 		return subCategoryService.updateSubCategory(subCategory);
 	}
 	@DeleteMapping("/{id}")

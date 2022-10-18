@@ -35,7 +35,7 @@ public class CategoryController {
 		return categoryService.saveAllCategory(categories);
 	}
 
-	@GetMapping()
+	@GetMapping("")
 	public ApiResponse getAllCategory(){
 		return categoryService.getAllCategories();
 		}
