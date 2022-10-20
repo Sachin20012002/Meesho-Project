@@ -11,6 +11,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -81,6 +82,10 @@ public class Product extends Auditable<String> {
     @NotNull(message = "Product Type should be provided")
     Type type;
 
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "product_id")
+    @ToString.Exclude
+    Set<ProductDetail> productDetails;
 
     @Override
     public boolean equals(Object o) {

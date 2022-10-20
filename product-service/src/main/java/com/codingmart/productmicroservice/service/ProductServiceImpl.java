@@ -49,7 +49,6 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public Product addProduct(Product product) {
-
         product.setTaxes(updateAndSaveTaxes(product.getTaxes()));
         product.setType(updateAndSaveType(product.getType()));
         product.setBrand(updateAndSaveBrand(product.getBrand()));
@@ -63,7 +62,6 @@ public class ProductServiceImpl implements ProductService{
         updatedProduct.setCode(generateProductCode(product));
         return productRepository.save(updatedProduct);
     }
-
 
 
     @Override
@@ -232,6 +230,9 @@ public class ProductServiceImpl implements ProductService{
         }
         return null;
     }
+
+
+
 
     private String generateProductCode(Product product) {
         return product.getId()+"-"+product.getBrand().getId()+"-"+product.getChildCategoryId()+"-"+product.getSupplierId();

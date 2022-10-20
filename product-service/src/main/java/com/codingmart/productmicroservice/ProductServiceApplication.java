@@ -25,10 +25,7 @@ public class ProductServiceApplication {
 	public AuditorAware<String> auditorAware(){
 		return new AuditorAwareImpl();
 	}
-//    @Bean
-//	public GenericResponse genericResponse(){
-//		return new GenericResponse();
-//	}
+
 
 
 }

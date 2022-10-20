@@ -22,7 +22,6 @@ public class Image extends Auditable<String> {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     @NotBlank(message = "Image name should be provided")
-    @Column(unique = true)
     private String name;
     @URL(message = "Provide valid URL")
     @NotBlank(message = "URL should be provided")
