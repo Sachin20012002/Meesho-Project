@@ -151,11 +151,7 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public List<Product> getAllProducts() {
-        List<Product> products=productRepository.findAll();
-        if(products.isEmpty()){
-            throw new NotFoundException("Products are not found");
-        }
-        return products;
+        return productRepository.findAll();
     }
 
     @Override
@@ -223,7 +219,7 @@ public class ProductServiceImpl implements ProductService{
     }
 
     private Discount updateAndSaveDiscount(Discount discount) {
-        if(Objects.nonNull(discount)) {
+        if (Objects.nonNull(discount)) {
             if (Objects.isNull(discountRepository.findByName(discount.getName())))
                 discountRepository.save(discount);
             return discountRepository.findByName(discount.getName());
@@ -235,7 +231,7 @@ public class ProductServiceImpl implements ProductService{
 
 
     private String generateProductCode(Product product) {
-        return product.getId()+"-"+product.getBrand().getId()+"-"+product.getChildCategoryId()+"-"+product.getSupplierId();
+        return product.getSupplierId()+"-"+product.getChildCategoryId()+"-"+product.getBrand().getId()+"-"+product.getId();
     }
 
 }
