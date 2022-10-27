@@ -1,6 +1,7 @@
 package com.codingmart.productmicroservice.service;
 
 import com.codingmart.productmicroservice.entity.Brand;
+import com.codingmart.productmicroservice.enums.Response;
 import com.codingmart.productmicroservice.exception.NotFoundException;
 import com.codingmart.productmicroservice.repository.BrandRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +26,7 @@ public class BrandServiceImpl implements BrandService{
 
     @Override
     public List<Brand> getAllBrands() {
-        List<Brand> brands=brandRepository.findAll();
-        if(brands.isEmpty()){
-            throw new NotFoundException("Brands are not found");
-        }
-        return brands;
+        return brandRepository.findAll();
     }
 
     @Override
@@ -41,12 +38,12 @@ public class BrandServiceImpl implements BrandService{
     }
 
     @Override
-    public String deleteBrand(Long id) {
+    public Response deleteBrand(Long id) {
         if(brandRepository.findById(id).isEmpty()){
             throw new NotFoundException("Brand Id not Found");
         }
         brandRepository.deleteById(id);
-        return "Brand Deleted Successfully";
+        return Response.DELETED;
     }
 
     @Override
@@ -55,17 +52,8 @@ public class BrandServiceImpl implements BrandService{
             throw new NotFoundException("Brand Id not Found");
         }
         Brand existingBrand=brandRepository.findById(id).get();
-        if(Objects.nonNull(brand.getName()) && !"".equals(brand.getName())){
-            existingBrand.setName(brand.getName());
-        }
-        if(Objects.nonNull(brand.getActive())) {
-            existingBrand.setActive(brand.getActive());
-        }
+        existingBrand.setName(brand.getName());
+        existingBrand.setActive(brand.getActive());
         return brandRepository.save(existingBrand);
-    }
-
-    @Override
-    public Brand getBrandByName(String name) {
-        return brandRepository.findByName(name);
     }
 }

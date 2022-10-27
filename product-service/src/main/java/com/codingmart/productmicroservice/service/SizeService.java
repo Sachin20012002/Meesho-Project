@@ -1,6 +1,7 @@
 package com.codingmart.productmicroservice.service;
 
 import com.codingmart.productmicroservice.entity.Size;
+import com.codingmart.productmicroservice.enums.Response;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ public interface SizeService {
 
     Size getSize(Long id);
 
-    String deleteSize(Long id);
+    Response deleteSize(Long id);
 
     Size updateSize(Size size,Long id);
 }

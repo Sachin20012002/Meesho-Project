@@ -1,6 +1,7 @@
 package com.codingmart.productmicroservice.service;
 
 import com.codingmart.productmicroservice.entity.Brand;
+import com.codingmart.productmicroservice.enums.Response;
 
 import java.util.List;
 
@@ -11,9 +12,8 @@ public interface BrandService {
 
     Brand getBrand(Long id);
 
-    String deleteBrand(Long id);
+    Response deleteBrand(Long id);
 
     Brand updateBrand(Brand brand,Long id);
 
-    Brand getBrandByName(String name);
 }

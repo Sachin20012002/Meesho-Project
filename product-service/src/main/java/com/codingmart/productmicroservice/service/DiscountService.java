@@ -1,6 +1,7 @@
 package com.codingmart.productmicroservice.service;
 
 import com.codingmart.productmicroservice.entity.Discount;
+import com.codingmart.productmicroservice.enums.Response;
 
 import java.util.List;
 
@@ -11,9 +12,8 @@ public interface DiscountService {
 
     Discount getDiscountById(Long id);
 
-    String deleteDiscount(Long id);
+    Response deleteDiscount(Long id);
 
     Discount updateDiscount(Discount discount,Long id);
 
-    Discount getDiscountByName(String name);
 }

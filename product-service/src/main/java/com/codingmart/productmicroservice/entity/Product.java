@@ -11,7 +11,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -85,7 +84,7 @@ public class Product extends Auditable<String> {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id")
     @ToString.Exclude
-    Set<ProductDetail> productDetails;
+    List<ProductDetail> productDetails;
 
     @Override
     public boolean equals(Object o) {

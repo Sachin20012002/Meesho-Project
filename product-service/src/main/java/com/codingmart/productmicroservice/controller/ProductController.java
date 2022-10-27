@@ -25,12 +25,6 @@ public class ProductController {
         return genericResponse;
     }
 
-    @GetMapping("/name/{name}")
-    public GenericResponse getProductByName(@PathVariable("name") String name){
-        genericResponse.setData(productService.getProductByName(name));
-        return genericResponse;
-    }
-
     @PostMapping(value = "",consumes = "application/json")
     public GenericResponse addProduct(@Valid @RequestBody Product product){
         genericResponse.setData(productService.addProduct(product));
@@ -54,7 +48,23 @@ public class ProductController {
          genericResponse.setData(productService.getAllProductsByChildCategoryId(id));
          return genericResponse;
      }
+    @GetMapping("/child-category/active/{id}")
+    public GenericResponse getAllActiveProductsByChildCategoryId(@PathVariable("id") Long id){
+        genericResponse.setData(productService.getAllActiveProductsByChildCategoryId(id));
+        return genericResponse;
+    }
+    @GetMapping("")
+    public GenericResponse getAllProducts(){
+        genericResponse.setData(productService.getAllProducts());
+        return genericResponse;
+    }
+    @GetMapping("/active")
+    public GenericResponse getAllActiveProducts(){
+        genericResponse.setData(productService.getAllActiveProducts());
+        return genericResponse;
+    }
 
+/*
      @GetMapping("/type/{id}")
      public GenericResponse getAllProductsByTypeId(@PathVariable("id") Long id){
          genericResponse.setData(productService.getAllProductsByTypeId(id));
@@ -67,27 +77,13 @@ public class ProductController {
          return genericResponse;
      }
 
-     @GetMapping("")
-     public GenericResponse getAllProducts(){
-         genericResponse.setData(productService.getAllProducts());
-         return genericResponse;
-     }
-
      @GetMapping("/color/{color}")
     public GenericResponse getAllProductsByColor(@PathVariable String color){
         genericResponse.setData(productService.getAllProductsByColor(color));
         return genericResponse;
      }
+*/
 
-     @GetMapping("/active")
-    public GenericResponse getAllActiveProducts(){
-        genericResponse.setData(productService.getAllActiveProducts());
-        return genericResponse;
-    }
 
-    @GetMapping("/child-category/active/{id}")
-    public GenericResponse getAllActiveProductsByChildCategoryId(@PathVariable("id") Long id){
-        genericResponse.setData(productService.getAllActiveProductsByChildCategoryId(id));
-        return genericResponse;
-    }
+
 }

@@ -2,17 +2,16 @@ package com.codingmart.productmicroservice.service;
 
 
 import com.codingmart.productmicroservice.entity.Product;
+import com.codingmart.productmicroservice.enums.Response;
 
 import java.util.List;
 
 public interface ProductService {
     Product getProductById(Long id);
 
-    Product getProductByName(String name);
-
     Product addProduct(Product product);
 
-    String deleteProduct(Long id);
+    Response deleteProduct(Long id);
 
     Product updateProduct(Long id, Product product);
 

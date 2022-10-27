@@ -1,12 +1,12 @@
 package com.codingmart.productmicroservice.service;
 
 import com.codingmart.productmicroservice.entity.Size;
+import com.codingmart.productmicroservice.enums.Response;
 import com.codingmart.productmicroservice.exception.NotFoundException;
 import com.codingmart.productmicroservice.repository.SizeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class SizeServiceImpl implements SizeService{
@@ -25,8 +25,7 @@ public class SizeServiceImpl implements SizeService{
 
     @Override
     public List<Size> getAllSizes() {
-        List<Size> sizes=sizeRepository.findAll();
-        return sizes;
+        return sizeRepository.findAll();
     }
 
     @Override
@@ -38,12 +37,12 @@ public class SizeServiceImpl implements SizeService{
     }
 
     @Override
-    public String deleteSize(Long id) {
+    public Response deleteSize(Long id) {
         if(sizeRepository.findById(id).isEmpty()){
             throw new NotFoundException("Size Id not Found");
         }
         sizeRepository.deleteById(id);
-        return "Size deleted successfully";
+        return Response.DELETED;
     }
 
     @Override
@@ -52,15 +51,9 @@ public class SizeServiceImpl implements SizeService{
             throw new NotFoundException("Size Id not Found");
         }
         Size existingSize=sizeRepository.findById(id).get();
-        if(Objects.nonNull(size.getName()) && !"".equals(size.getName())){
-            existingSize.setName(size.getName());
-        }
-        if(Objects.nonNull(size.getQuantity())){
-            existingSize.setQuantity(size.getQuantity());
-        }
-        if(Objects.nonNull(size.getActive())){
-            existingSize.setActive(size.getActive());
-        }
+        existingSize.setName(size.getName());
+        existingSize.setQuantity(size.getQuantity());
+        existingSize.setActive(size.getActive());
         return sizeRepository.save(existingSize);
     }
 }

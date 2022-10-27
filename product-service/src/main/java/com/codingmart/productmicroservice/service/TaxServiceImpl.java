@@ -2,6 +2,7 @@ package com.codingmart.productmicroservice.service;
 
 import com.codingmart.productmicroservice.entity.Product;
 import com.codingmart.productmicroservice.entity.Tax;
+import com.codingmart.productmicroservice.enums.Response;
 import com.codingmart.productmicroservice.exception.NotFoundException;
 import com.codingmart.productmicroservice.repository.ProductRepository;
 import com.codingmart.productmicroservice.repository.TaxRepository;
@@ -42,15 +43,9 @@ public class TaxServiceImpl implements TaxService{
             throw new NotFoundException("Tax Id not Found");
         }
         Tax existingTax=taxRepository.findById(id).get();
-        if(Objects.nonNull(tax.getName()) && !"".equals(tax.getName())){
-            existingTax.setName(tax.getName());
-        }
-        if(Objects.nonNull(tax.getPercent())){
-            existingTax.setPercent(tax.getPercent());
-        }
-        if ((Objects.nonNull(tax.getActive()))){
-            existingTax.setActive(tax.getActive());
-        }
+        existingTax.setName(tax.getName());
+        existingTax.setPercent(tax.getPercent());
+        existingTax.setActive(tax.getActive());
         return taxRepository.save(existingTax);
     }
 
@@ -63,7 +58,7 @@ public class TaxServiceImpl implements TaxService{
     }
 
     @Override
-    public String deleteTax(Long id) {
+    public Response deleteTax(Long id) {
         if(taxRepository.findById(id).isEmpty()){
             throw new NotFoundException("Tax Id not Found");
         }
@@ -76,7 +71,7 @@ public class TaxServiceImpl implements TaxService{
             productRepository.save(p);
         }
         taxRepository.deleteById(id);
-        return "Tax deleted Successfully";
+        return Response.DELETED;
     }
 
     @Override

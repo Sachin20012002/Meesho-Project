@@ -1,14 +1,14 @@
 package com.codingmart.productmicroservice.service;
 
 import com.codingmart.productmicroservice.entity.*;
+import com.codingmart.productmicroservice.enums.Response;
 import com.codingmart.productmicroservice.exception.NotFoundException;
 import com.codingmart.productmicroservice.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 public class ProductServiceImpl implements ProductService{
@@ -18,15 +18,21 @@ public class ProductServiceImpl implements ProductService{
     private final BrandRepository brandRepository;
     private final TypeRepository typeRepository;
     private final DiscountRepository discountRepository;
+    private final ProductDetailRepository productDetailRepository;
+    private final ImageService imageService;
+    private final SizeService sizeService;
 
 
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository, TaxRepository taxRepository, BrandRepository brandRepository, TypeRepository typeRepository, DiscountRepository discountRepository){
+    public ProductServiceImpl(ProductRepository productRepository, TaxRepository taxRepository, BrandRepository brandRepository, TypeRepository typeRepository, DiscountRepository discountRepository, ProductDetailRepository productDetailRepository, ImageService imageService, SizeService sizeService){
         this.productRepository=productRepository;
         this.taxRepository = taxRepository;
         this.brandRepository = brandRepository;
         this.typeRepository = typeRepository;
         this.discountRepository = discountRepository;
+        this.productDetailRepository = productDetailRepository;
+        this.imageService = imageService;
+        this.sizeService = sizeService;
     }
 
 
@@ -39,38 +45,25 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public Product getProductByName(String name) {
-        if(Objects.nonNull(productRepository.findByName(name))){
-            throw new NotFoundException("Product Name not Found");
-        }
-        return productRepository.findByName(name);
-    }
-
-
-    @Override
+    @Transactional
     public Product addProduct(Product product) {
-        product.setTaxes(updateAndSaveTaxes(product.getTaxes()));
-        product.setType(updateAndSaveType(product.getType()));
-        product.setBrand(updateAndSaveBrand(product.getBrand()));
-        product.setDiscount(updateAndSaveDiscount(product.getDiscount()));
-
-        product.setQuantity(calculateTotalQuantityFromSizes(product.getAvailableSizes()));
-        product.setMaximumRetailPrice(calculateMaximumRetailPrice(product.getTaxes(),product.getPrice()));
-        product.setFinalDiscountedPrice(calculateFinalDiscountedPrice(product.getDiscount(),product.getPrice()));
-
+        updateAndSaveTransientObjects(product,product);
         Product updatedProduct=productRepository.save(product);
         updatedProduct.setCode(generateProductCode(product));
         return productRepository.save(updatedProduct);
     }
 
 
+
+
     @Override
-    public String deleteProduct(Long id) {
+    public Response deleteProduct(Long id) {
         if(productRepository.findById(id).isEmpty()){
             throw new NotFoundException("Product Id not Found");
         }
         productRepository.deleteById(id);
-        return "Product deleted Successfully";
+        //enum
+        return Response.DELETED;
     }
 
 
@@ -80,51 +73,97 @@ public class ProductServiceImpl implements ProductService{
             throw new NotFoundException("Product Id not Found");
         }
         Product existingProduct=productRepository.findById(id).get();
+        existingProduct.setName(product.getName());
+        existingProduct.setPrice(product.getPrice());
+        existingProduct.setSupplierId(product.getSupplierId());
+        existingProduct.setDescription(product.getDescription());
+        existingProduct.setChildCategoryId(product.getChildCategoryId());
+        updateAndSaveTransientObjects(product,existingProduct);
+        existingProduct.setProductDetails(updatedProductDetails(product.getProductDetails(),existingProduct.getProductDetails()));
+        existingProduct.setAvailableSizes(updatedAvailableSizes(product.getAvailableSizes(),existingProduct.getAvailableSizes()));
+        existingProduct.setImages(updatedImages(product.getImages(),existingProduct.getImages()));
+        return productRepository.save(existingProduct);
 
-        if(Objects.nonNull(product.getName()) && !"".equalsIgnoreCase(product.getName())){
-            existingProduct.setName(product.getName());
-        }
+    }
 
-        if(Objects.nonNull(product.getPrice())){
-            existingProduct.setPrice(product.getPrice());
-        }
+    private List<Image> updatedImages(List<Image> images, List<Image> existingImages) {
 
-        if(Objects.nonNull(product.getColor()) && !"".equalsIgnoreCase(product.getColor())){
-            existingProduct.setName(product.getColor());
+        List<Image> updatedImages=new ArrayList<>();
+        HashMap<String,Image> existingImageNames=new HashMap<>();
+        HashSet<String> newImageNames=new HashSet<>();
+        for(Image image:images)
+            newImageNames.add(image.getName());
+        for(Image image:existingImages){
+            if(!newImageNames.contains(image.getName())){
+                imageService.deleteImage(image.getId());
+            }
+            else{
+                existingImageNames.put(image.getName(),image);
+            }
         }
+        for(Image image:images){
+            if(!existingImageNames.containsKey(image.getName())){
+                updatedImages.add(imageService.addImage(image));
+            }
+            else{
+                updatedImages.add(imageService.updateImage(image,existingImageNames.get(image.getName()).getId()));
+            }
+        }
+        return updatedImages;
+    }
 
-        if(Objects.nonNull(product.getDescription()) && !"".equalsIgnoreCase(product.getDescription())){
-            existingProduct.setName(product.getDescription());
+    private List<Size> updatedAvailableSizes(List<Size> availableSizes, List<Size> existingAvailableSizes) {
+        List<Size> updatedAvailableSizes=new ArrayList<>();
+        HashMap<String,Size> existingSizesNames=new HashMap<>();
+        HashSet<String> newSizesNames=new HashSet<>();
+        for(Size size:availableSizes)
+            newSizesNames.add(size.getName());
+        for(Size size:existingAvailableSizes){
+            if(!newSizesNames.contains(size.getName())){
+                sizeService.deleteSize(size.getId());
+            }
+            else{
+                existingSizesNames.put(size.getName(),size);
+            }
         }
+        for(Size size:availableSizes){
+            if(!existingSizesNames.containsKey(size.getName())){
+                updatedAvailableSizes.add(sizeService.addSize(size));
+            }
+            else{
+                updatedAvailableSizes.add(sizeService.updateSize(size,existingSizesNames.get(size.getName()).getId()));
+            }
+        }
+        return updatedAvailableSizes;
+    }
 
-        if(Objects.nonNull(product.getChildCategoryId())){
-            existingProduct.setChildCategoryId(product.getChildCategoryId());
+    private List<ProductDetail> updatedProductDetails(List<ProductDetail> productDetails, List<ProductDetail> existingProductDetails) {
+        List<ProductDetail> updatedProductDetails=new ArrayList<>();
+        HashMap<String,ProductDetail> existingProductDetailNames=new HashMap<>();
+        HashMap<String,ProductDetail> newProductDetailNames=new HashMap<>();
+        for(ProductDetail productDetail:productDetails)
+            newProductDetailNames.put(productDetail.getName(),productDetail);
+        for(ProductDetail productDetail:existingProductDetails){
+            if(!newProductDetailNames.containsKey(productDetail.getName())){
+                productDetailRepository.deleteById(productDetail.getId());
+            }
+            else{
+                existingProductDetailNames.put(productDetail.getName(),productDetail);
+            }
         }
-
-        if(Objects.nonNull(product.getBrand())){
-           existingProduct.setBrand(updateAndSaveBrand(product.getBrand()));
+        for(ProductDetail productDetail:productDetails){
+            if(!existingProductDetailNames.containsKey(productDetail.getName())){
+                updatedProductDetails.add(productDetailRepository.save(productDetail));
+            }
+            else{
+                ProductDetail oldProductDetail=existingProductDetailNames.get(productDetail.getName());
+                if(!oldProductDetail.getValue().equals(productDetail.getValue())){
+                    oldProductDetail.setValue(productDetail.getValue());
+                }
+                updatedProductDetails.add(oldProductDetail);
+            }
         }
-
-        if(Objects.nonNull(product.getImages())){
-            existingProduct.setImages(product.getImages());
-        }
-
-        if(Objects.nonNull(product.getAvailableSizes())){
-            existingProduct.setQuantity(calculateTotalQuantityFromSizes(product.getAvailableSizes()));
-            existingProduct.setAvailableSizes(product.getAvailableSizes());
-        }
-        if(Objects.nonNull(product.getTaxes())){
-            existingProduct.setMaximumRetailPrice(calculateMaximumRetailPrice(product.getTaxes(),product.getPrice()));
-            existingProduct.setTaxes(updateAndSaveTaxes(product.getTaxes()));
-        }
-
-        if(Objects.nonNull(product.getDiscount())){
-            existingProduct.setFinalDiscountedPrice(calculateFinalDiscountedPrice(product.getDiscount(),product.getPrice()));
-            existingProduct.setDiscount(updateAndSaveDiscount(product.getDiscount()));
-        }
-
-        productRepository.save(existingProduct);
-        return existingProduct;
+        return updatedProductDetails;
     }
 
     @Override
@@ -209,13 +248,9 @@ public class ProductServiceImpl implements ProductService{
     }
 
     private Brand updateAndSaveBrand(Brand brand) {
-
-        if(Objects.nonNull(brand)) {
-            if (Objects.isNull(brandRepository.findByName(brand.getName())))
+        if (Objects.isNull(brandRepository.findByName(brand.getName())))
                 brandRepository.save(brand);
-            return brandRepository.findByName(brand.getName());
-        }
-        return null;
+        return brandRepository.findByName(brand.getName());
     }
 
     private Discount updateAndSaveDiscount(Discount discount) {
@@ -232,6 +267,22 @@ public class ProductServiceImpl implements ProductService{
 
     private String generateProductCode(Product product) {
         return product.getSupplierId()+"-"+product.getChildCategoryId()+"-"+product.getBrand().getId()+"-"+product.getId();
+    }
+
+    private void updateAndSaveTransientObjects(Product product,Product resultantProduct) {
+         /* Regarding builder : did not use it, as we are only setting some attributes which need
+                                to be saved before saving the product. If we use builder we have
+                                set all the attributes of the product.
+        */
+
+        resultantProduct.setTaxes(updateAndSaveTaxes(product.getTaxes()));
+        resultantProduct.setType(updateAndSaveType(product.getType()));
+        resultantProduct.setBrand(updateAndSaveBrand(product.getBrand()));
+        resultantProduct.setDiscount(updateAndSaveDiscount(product.getDiscount()));
+
+        resultantProduct.setQuantity(calculateTotalQuantityFromSizes(product.getAvailableSizes()));
+        resultantProduct.setMaximumRetailPrice(calculateMaximumRetailPrice(product.getTaxes(),product.getPrice()));
+        resultantProduct.setFinalDiscountedPrice(calculateFinalDiscountedPrice(product.getDiscount(),product.getPrice()));
     }
 
 }

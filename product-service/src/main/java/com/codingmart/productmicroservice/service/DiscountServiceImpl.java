@@ -1,13 +1,13 @@
 package com.codingmart.productmicroservice.service;
 
 import com.codingmart.productmicroservice.entity.Discount;
+import com.codingmart.productmicroservice.enums.Response;
 import com.codingmart.productmicroservice.exception.NotFoundException;
 import com.codingmart.productmicroservice.repository.DiscountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class DiscountServiceImpl implements DiscountService{
@@ -25,11 +25,7 @@ public class DiscountServiceImpl implements DiscountService{
 
     @Override
     public List<Discount> getAllDiscounts() {
-        List<Discount> discounts=discountRepository.findAll();
-        if(discounts.isEmpty()){
-            throw new NotFoundException("discounts are not found");
-        }
-        return discounts;
+        return discountRepository.findAll();
     }
 
     @Override
@@ -41,12 +37,12 @@ public class DiscountServiceImpl implements DiscountService{
     }
 
     @Override
-    public String deleteDiscount(Long id) {
+    public Response deleteDiscount(Long id) {
         if(discountRepository.findById(id).isEmpty()){
             throw new NotFoundException("Discount Id not Found");
         }
         discountRepository.deleteById(id);
-        return "Discount deleted Successfully";
+        return Response.DELETED;
     }
 
     @Override
@@ -55,23 +51,11 @@ public class DiscountServiceImpl implements DiscountService{
             throw new NotFoundException("Discount Id not Found");
         }
         Discount existingDiscount=discountRepository.findById(id).get();
-        if(Objects.nonNull(discount.getName()) && !"".equals(discount.getName())){
-            existingDiscount.setName(discount.getName());
-        }
-        if(Objects.nonNull(discount.getActive())){
-            existingDiscount.setActive(discount.getActive());
-        }
-        if(Objects.nonNull(discount.getPercent())){
-            existingDiscount.setPercent(discount.getPercent());
-        }
+        existingDiscount.setName(discount.getName());
+        existingDiscount.setActive(discount.getActive());
+        existingDiscount.setPercent(discount.getPercent());
         return discountRepository.save(existingDiscount);
+
     }
 
-    @Override
-    public Discount getDiscountByName(String name) {
-        if(Objects.isNull(discountRepository.findByName(name))){
-            throw new NotFoundException("Discount Name not Found");
-        }
-        return discountRepository.findByName(name);
-    }
 }
