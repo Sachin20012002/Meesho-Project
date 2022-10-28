@@ -98,4 +98,7 @@ public class Product extends Auditable<String> {
     public int hashCode() {
         return getClass().hashCode();
     }
+
+
+
 }

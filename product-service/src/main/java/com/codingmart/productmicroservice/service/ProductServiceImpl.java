@@ -195,6 +195,7 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public List<Product> getAllProductsByColor(String color) {
+
         return productRepository.findAllByColor(color);
     }
 

@@ -7,6 +7,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="filter-service" />
         <module name="product-microservice" />
         <module name="category-service" />
         <module name="cloud-config-server" />
@@ -15,11 +16,9 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="category-service" target="11" />
-      <module name="cloud-config-server" target="17" />
-      <module name="cloud-gateway" target="17" />
-      <module name="product-microservice" target="17" />
-      <module name="service-registry" target="17" />
+      <module name="filter" target="18" />
+      <module name="filter-microservice" target="11" />
+      <module name="oviya" target="1.5" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
@@ -27,6 +26,8 @@
       <module name="category-service" options="-parameters" />
       <module name="cloud-config-server" options="-parameters" />
       <module name="cloud-gateway" options="-parameters" />
+      <module name="filter-microservice" options="-parameters" />
+      <module name="filter-service" options="-parameters" />
       <module name="product-microservice" options="-parameters" />
       <module name="service-registry" options="-parameters" />
     </option>

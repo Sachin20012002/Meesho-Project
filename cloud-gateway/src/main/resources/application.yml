@@ -15,6 +15,7 @@ spring:
           uri: lb://CATEGORY-SERVICE
           predicates:
             - Path=/meesho-categorymicroservice/**
-
-
-
+        - id: FILTER-SERVICE
+          uri: lb://FILTER-SERVICE
+          predicates:
+             - Path=/meesho-filtermicroservice/**
