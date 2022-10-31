@@ -1,6 +1,7 @@
 package com.codingmart.productmicroservice.service;
 
 import com.codingmart.productmicroservice.entity.Brand;
+import com.codingmart.productmicroservice.entity.BrandCode;
 import com.codingmart.productmicroservice.enums.Response;
 import com.codingmart.productmicroservice.exception.NotFoundException;
 import com.codingmart.productmicroservice.repository.BrandRepository;
@@ -21,6 +22,7 @@ public class BrandServiceImpl implements BrandService{
     }
     @Override
     public Brand addBrand(Brand brand) {
+        brand.setCode(new BrandCode());
         return brandRepository.save(brand);
     }
 

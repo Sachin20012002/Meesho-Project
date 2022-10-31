@@ -21,10 +21,11 @@ public class ProductServiceImpl implements ProductService{
     private final ProductDetailRepository productDetailRepository;
     private final ImageService imageService;
     private final SizeService sizeService;
+    private final ProductCodeRepository productCodeRepository;
 
 
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository, TaxRepository taxRepository, BrandRepository brandRepository, TypeRepository typeRepository, DiscountRepository discountRepository, ProductDetailRepository productDetailRepository, ImageService imageService, SizeService sizeService){
+    public ProductServiceImpl(ProductRepository productRepository, TaxRepository taxRepository, BrandRepository brandRepository, TypeRepository typeRepository, DiscountRepository discountRepository, ProductDetailRepository productDetailRepository, ImageService imageService, SizeService sizeService, ProductCodeRepository productCodeRepository){
         this.productRepository=productRepository;
         this.taxRepository = taxRepository;
         this.brandRepository = brandRepository;
@@ -33,6 +34,7 @@ public class ProductServiceImpl implements ProductService{
         this.productDetailRepository = productDetailRepository;
         this.imageService = imageService;
         this.sizeService = sizeService;
+        this.productCodeRepository = productCodeRepository;
     }
 
 
@@ -48,9 +50,8 @@ public class ProductServiceImpl implements ProductService{
     @Transactional
     public Product addProduct(Product product) {
         updateAndSaveTransientObjects(product,product);
-        Product updatedProduct=productRepository.save(product);
-        updatedProduct.setCode(generateProductCode(product));
-        return productRepository.save(updatedProduct);
+        product.setCode(generateProductCode(product));
+        return productRepository.save(product);
     }
 
 
@@ -243,14 +244,18 @@ public class ProductServiceImpl implements ProductService{
     }
 
     private Type updateAndSaveType(Type type) {
-        if(Objects.isNull(typeRepository.findByName(type.getName())))
+        if(Objects.isNull(typeRepository.findByName(type.getName()))) {
+            type.setCode(new TypeCode());
             typeRepository.save(type);
+        }
         return typeRepository.findByName(type.getName());
     }
 
     private Brand updateAndSaveBrand(Brand brand) {
-        if (Objects.isNull(brandRepository.findByName(brand.getName())))
-                brandRepository.save(brand);
+        if (Objects.isNull(brandRepository.findByName(brand.getName()))) {
+            brand.setCode(new BrandCode());
+            brandRepository.save(brand);
+        }
         return brandRepository.findByName(brand.getName());
     }
 
@@ -267,7 +272,21 @@ public class ProductServiceImpl implements ProductService{
 
 
     private String generateProductCode(Product product) {
-        return product.getSupplierId()+"-"+product.getChildCategoryId()+"-"+product.getBrand().getId()+"-"+product.getId();
+        String brandCode= String.valueOf(product.getBrand().getCode().getId());
+        String typeCode=String.valueOf(product.getType().getCode().getId());
+        String productCode="B"+brandCode+"-T"+typeCode+"-";
+        ProductCode existingProductCode=productCodeRepository.findByName(productCode);
+        if(Objects.isNull(existingProductCode)){
+            productCodeRepository.save(ProductCode.builder().name(productCode).value(1L).build());
+            productCode += "1";
+        }
+        else{
+            Long value=existingProductCode.getValue()+1;
+            productCode += value;
+            existingProductCode.setValue(value);
+        }
+        System.out.println(productCode);
+        return productCode;
     }
 
     private void updateAndSaveTransientObjects(Product product,Product resultantProduct) {

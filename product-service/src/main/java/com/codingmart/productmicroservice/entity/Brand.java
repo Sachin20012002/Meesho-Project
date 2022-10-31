@@ -25,5 +25,8 @@ public class Brand extends Auditable<String> {
     private String name;
     @NotNull(message = "Provide active status")
     private Boolean active;
+    @OneToOne(cascade = CascadeType.ALL)
+    private BrandCode code;
+
 
 }

@@ -1,6 +1,7 @@
 package com.codingmart.productmicroservice.service;
 
 import com.codingmart.productmicroservice.entity.Type;
+import com.codingmart.productmicroservice.entity.TypeCode;
 import com.codingmart.productmicroservice.enums.Response;
 import com.codingmart.productmicroservice.exception.NotFoundException;
 import com.codingmart.productmicroservice.repository.TypeRepository;
@@ -56,6 +57,7 @@ public class TypeServiceImpl implements TypeService{
 
     @Override
     public Type addType(Type type) {
+        type.setCode(new TypeCode());
         return typeRepository.save(type);
     }
 

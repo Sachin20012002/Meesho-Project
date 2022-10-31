@@ -22,7 +22,7 @@ import java.util.Objects;
 @EntityListeners(AuditingEntityListener.class)
 public class Product extends Auditable<String> {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     @NotBlank(message = "Product name should be provided")
     private String name;

@@ -27,5 +27,8 @@ public class Type extends Auditable<String> {
     @NotNull(message = "Provide active status")
     private Boolean active;
 
+   @OneToOne(cascade = CascadeType.ALL)
+   private TypeCode code;
+
 
 }
