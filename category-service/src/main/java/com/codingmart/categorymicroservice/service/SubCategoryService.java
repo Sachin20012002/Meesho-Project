@@ -37,8 +37,8 @@ public class SubCategoryService {
 		SubCategory subCategory1=subCategoryRepo.findByName(subCategory.getName());
 		if(Objects.isNull(subCategory1)) {
 
-			subCategoryRepo.save(subCategory);
-			apiResponse.setData(subCategory);
+			SubCategory subCategory2=subCategoryRepo.save(subCategory);
+			apiResponse.setData(subCategory2);
 			apiResponse.setStatus(HttpStatus.OK.value());
 			apiResponse.setError(null);
 
@@ -83,8 +83,8 @@ public class SubCategoryService {
 		if(subCategoryRepo.findById(id).isEmpty()) {
 			 throw new IdNotFound("Product Id not Found");
 		}
-		SubCategory s=subCategoryRepo.findById(id).get();
-		apiResponse.setData(s);
+		subCategoryRepo.findById(id).get();
+		apiResponse.setData(subCategoryRepo.findById(id).get());
 		apiResponse.setStatus(HttpStatus.OK.value());
 		apiResponse.setError(null);
 		return apiResponse;

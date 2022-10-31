@@ -17,8 +17,8 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 	
 
 	//get all sub and child category in specfic category
-	@Query("select u from Category u where u.id=:x" )
-	public Category getActiveCategoryById(@Param("x") long id);
+	@Query("select u from Category u where u.id=:id" )
+	public Category getActiveCategoryById(@Param("id") long id);
 
 	@Query(value = "select * from category e where e.active=true",nativeQuery = true)
     public  List<Category> findAll();

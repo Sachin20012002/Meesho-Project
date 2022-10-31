@@ -35,8 +35,8 @@ public class ChildCategoryService {
 		public ApiResponse saveChildCategory(ChildCategory childCategory) {
 			ChildCategory childCategory1=childCategoryRepo.findByName(childCategory.getName());
 			if(Objects.isNull(childCategory1)) {
-				childCategoryRepo.save(childCategory);
-			    apiResponse.setData(childCategory);
+				ChildCategory childCategory2=childCategoryRepo.save(childCategory);
+			    apiResponse.setData(childCategory2);
 				apiResponse.setStatus(HttpStatus.OK.value());
 				apiResponse.setError(null);
 			}
@@ -80,11 +80,11 @@ public class ChildCategoryService {
 			if(childCategoryRepo.findById(id).isEmpty()) {
 				 throw new IdNotFound("Product Id not Found");
 			}
-			ChildCategory cc=childCategoryRepo.findById(id).get();
+			childCategoryRepo.findById(id).get();
 			
-				boolean status=cc.isActive();
+				boolean status=childCategoryRepo.findById(id).get().isActive();
 				if(status==true) {
-					apiResponse.setData(cc);
+					apiResponse.setData(childCategoryRepo.findById(id).get());
 					apiResponse.setStatus(HttpStatus.OK.value());
 					apiResponse.setError(null);
 					}
@@ -117,7 +117,7 @@ public class ChildCategoryService {
 			apiResponse.setError(null);
 			   return apiResponse;
 		}
-		public ApiResponse deletechildCategory(long id) {
+		public ApiResponse deleteChildCategory(long id) {
 			if(childCategoryRepo.findById(id).isEmpty()) {
 				 throw new IdNotFound("Product Id not Found");
 			}

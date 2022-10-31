@@ -23,6 +23,7 @@ public class SubCategoryController {
 	private SubCategoryService subCategoryService;
 	
 	public SubCategoryController(SubCategoryService subCategoryService) {
+
 		this.subCategoryService=subCategoryService;
 	}
 	
@@ -36,10 +37,12 @@ public class SubCategoryController {
 	}
 	@GetMapping()
 	public ApiResponse getAllSubCategory(){
+
 		return subCategoryService.getAllSubCategory();
 	}
 	@GetMapping("/{id}")
 	public ApiResponse getSubCategoryById(@PathVariable long id) {
+
 		return subCategoryService.getSubCategoryById(id);
 	}
 //	@GetMapping("/subCategory/{name}")
@@ -52,6 +55,7 @@ public class SubCategoryController {
 	}
 	@DeleteMapping("/{id}")
 	public ApiResponse deleteSubCategory(@PathVariable long id) {
+
 		return subCategoryService.deleteSubCategory(id);
 	}
 	

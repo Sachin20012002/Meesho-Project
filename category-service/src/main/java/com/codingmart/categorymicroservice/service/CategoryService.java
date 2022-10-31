@@ -29,8 +29,8 @@ public class CategoryService {
 	public ApiResponse saveCategory(Category category) {
 		Category category1=categoryRepo.findByName(category.getName());
 		if(Objects.isNull(category1)) {
-		categoryRepo.save(category);
-		apiResponse.setData(category);
+		Category category2 =categoryRepo.save(category);
+		apiResponse.setData(category2);
 		apiResponse.setStatus(HttpStatus.OK.value());
 		apiResponse.setError(null);
 		}
@@ -74,16 +74,16 @@ public class CategoryService {
 		if(categoryRepo.findById(id).isEmpty()) {
 			 throw new IdNotFound("Category Id not Found");
 		}
-		Category c = categoryRepo.findById(id).get();
-		apiResponse.setData(c);
+		//categoryRepo.findById(id).get();
+		apiResponse.setData(categoryRepo.findById(id).get());
 		apiResponse.setStatus(HttpStatus.OK.value());
 		apiResponse.setError(null);
 		return apiResponse;
 	}
 	
 //	public ApiResponse getCategoryByName(String name) {
-	//Category c=categoryRepo.findByName(name);
-	//apiResponse.setData(c);
+	//categoryRepo.findByName(name);
+	//apiResponse.setData(categoryRepo.findByName(name));
 	//apiResponse.setStatus(HttpStatus.OK.value());
 	//apiResponse.setError(null);
 	
@@ -120,10 +120,10 @@ public class CategoryService {
     	 if(categoryRepo.findById(id).isEmpty()) {
 			 throw new IdNotFound("Category Id not Found");
 		}
-    	 Category cy=categoryRepo.getActiveCategoryById(id);
-    	 boolean status=cy.isActive();
+    	// Category cy=categoryRepo.getActiveCategoryById(id);
+    	 boolean status=categoryRepo.getActiveCategoryById(id).isActive();
     	if(status==true) {
-    		apiResponse.setData(cy);
+    		apiResponse.setData(categoryRepo.getActiveCategoryById(id));
     		apiResponse.setStatus(HttpStatus.OK.value());
     		apiResponse.setError(null);
     		 }

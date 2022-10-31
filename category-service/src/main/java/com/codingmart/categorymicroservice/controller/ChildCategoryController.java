@@ -47,12 +47,12 @@ public class ChildCategoryController {
 //			return childCategoryService.getChildCategoryByName(name);
 //		}
 		@PutMapping("/{id}")
-		public ApiResponse updateChildCategoy(@RequestBody ChildCategory childCategory,@PathVariable Long id) {
+		public ApiResponse updateChildCategory(@RequestBody ChildCategory childCategory,@PathVariable Long id) {
 			return childCategoryService.updateChildCategory(childCategory,id);
 		}
 		@DeleteMapping("/{id}")
 		public ApiResponse deleteChildCategory(@PathVariable long id) {
-			return childCategoryService.deletechildCategory(id);
+			return childCategoryService.deleteChildCategory(id);
 		}
 	}
         

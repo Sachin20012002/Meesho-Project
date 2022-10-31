@@ -40,6 +40,7 @@ public class CategoryController {
 
 	@GetMapping("")
 	public ApiResponse getAllCategory(){
+
 		return categoryService.getAllCategories();
 		}
 	
