@@ -16,6 +16,13 @@ public class ApiResponse {
 		this.data = null;
 		this.error = null;
 	}
+
+	public void resetResponse(){
+		this.status = HttpStatus.OK.value();
+		this.data = null;
+		this.error = null;
+	}
+
 	
 	public int getStatus() {
 		return status;

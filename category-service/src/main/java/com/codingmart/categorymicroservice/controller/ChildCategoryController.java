@@ -42,10 +42,10 @@ public class ChildCategoryController {
 		public ApiResponse getChildCategoryById(@PathVariable long id) {
 			return childCategoryService.getChildCategoryById(id);
 		}
-//		@GetMapping("/ChildCategory/{name}")
-//		public ApiResponse getChildCategoryByName(@PathVariable String name) {
-//			return childCategoryService.getChildCategoryByName(name);
-//		}
+		@GetMapping("/ChildCategory/{name}")
+		public ApiResponse getChildCategoryByName(@PathVariable String name) {
+			return childCategoryService.getChildCategoryByName(name);
+		}
 		@PutMapping("/{id}")
 		public ApiResponse updateChildCategory(@RequestBody ChildCategory childCategory,@PathVariable Long id) {
 			return childCategoryService.updateChildCategory(childCategory,id);

@@ -45,10 +45,10 @@ public class SubCategoryController {
 
 		return subCategoryService.getSubCategoryById(id);
 	}
-//	@GetMapping("/subCategory/{name}")
-//	public ApiResponse getSubCategoryByName(@PathVariable String name) {
-//		return subCategoryService.getsubCategoryByName(name);
-//	}
+	@GetMapping("/subCategory/{name}")
+	public ApiResponse getSubCategoryByName(@PathVariable String name) {
+		return subCategoryService.getSubCategoryByName(name);
+	}
 	@PutMapping("/{id}")
 	public ApiResponse updateSubCategory(@RequestBody SubCategory subCategory ,@PathVariable("id") Long id) {
 		return subCategoryService.updateSubCategory(subCategory,id);

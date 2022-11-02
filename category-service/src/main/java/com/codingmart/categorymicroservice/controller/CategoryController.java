@@ -49,10 +49,10 @@ public class CategoryController {
 	 return categoryService.getCategoryById(id);
 		}
 	
-//	@GetMapping("/category/{name}")
-//	public ApiResponse getCategoryByName(@PathVariable String name) {
-//		return categoryService.getCategoryByName(name);
-//	}
+	@GetMapping("/category/{name}")
+	public ApiResponse getCategoryByName(@PathVariable String name) {
+		return categoryService.getCategoryByName(name);
+	}
 	
 	
 	@PutMapping("/{id}")
@@ -63,6 +63,7 @@ public class CategoryController {
 	@DeleteMapping("/{id}")
 	public ApiResponse deleteCategory(@PathVariable long id)
 	{
+
 		return categoryService.deleteCategory(id);
 	}
 	

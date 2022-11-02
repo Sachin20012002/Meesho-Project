@@ -27,68 +27,52 @@ public class CategoryService {
 	
 
 	public ApiResponse saveCategory(Category category) {
-
-		Category category1=categoryRepo.findByName(category.getName());
-		if(Objects.isNull(category1)) {
-		//Category category2 =categoryRepo.save(category);
-		apiResponse.setData(categoryRepo.save(category));
-		apiResponse.setStatus(HttpStatus.OK.value());
-		apiResponse.setError(null);
+		apiResponse.resetResponse();
+		if(Objects.isNull(categoryRepo.findByName(category.getName()))) {
+			apiResponse.setData(categoryRepo.save(category));
 		}
 		else {
-			apiResponse.setStatus(HttpStatus.OK.value());
-			apiResponse.setData(null);
-			apiResponse.setError("id already exist");
+			apiResponse.setError("Category already exist");
 		}
 		return apiResponse;
 	}
 
 	
 	public ApiResponse saveAllCategory(List<Category> categories){
+		apiResponse.resetResponse();
 		for(Category category : categories)
 		{
-			Category category1=categoryRepo.findByName(category.getName());
-			if(Objects.isNull(category1)) {
+			if(Objects.isNull(categoryRepo.findByName(category.getName())))
 				apiResponse.setData(categoryRepo.save(category));
-				apiResponse.setStatus(HttpStatus.OK.value());
-				apiResponse.setError(null);
-			}
 		}
-
 		return apiResponse;
 	}
 
 	public ApiResponse getAllCategories() {
+		apiResponse.resetResponse();
 		List<Category> categories=categoryRepo.findAll();
-		 if(categories.isEmpty()) {
+		 if(categories.isEmpty())
 			 throw new IdNotFound("no Categories Present");
-		 }
 		apiResponse.setData(categories);
-		apiResponse.setStatus(HttpStatus.OK.value());
-		apiResponse.setError(null);
 		return apiResponse;
 	}
 	
 	public ApiResponse getCategoryById(long id) {
-		if(categoryRepo.findById(id).isEmpty()) {
+		apiResponse.resetResponse();
+		if(categoryRepo.findById(id).isEmpty())
 			 throw new IdNotFound("Category Id not Found");
-		}
 		apiResponse.setData(categoryRepo.findById(id).get());
-		apiResponse.setStatus(HttpStatus.OK.value());
-		apiResponse.setError(null);
 		return apiResponse;
 	}
 	
-//	public ApiResponse getCategoryByName(String name) {
+	public ApiResponse getCategoryByName(String name) {
+		apiResponse.resetResponse();
+		apiResponse.setData(categoryRepo.findByName(name));
+		return apiResponse;
+	}
 
-	//apiResponse.setData(categoryRepo.findByName(name));
-	//apiResponse.setStatus(HttpStatus.OK.value());
-	//apiResponse.setError(null);
-	
-//		return apiResponse;
-//	}
-	 
 	public ApiResponse UpdateCategory(Category category,Long id) {
+		apiResponse.resetResponse();
 		 if(categoryRepo.findById(id).isEmpty()){
 	            throw new IdNotFound("Category Id not Found to update");
 	       }
@@ -96,54 +80,44 @@ public class CategoryService {
 		exist.setName(category.getName());
 		exist.setActive(category.isActive());	
 		apiResponse.setData(categoryRepo.save(exist));
-		apiResponse.setStatus(HttpStatus.OK.value());
-		apiResponse.setError(null);
 		return apiResponse;
 	}
 
 	public ApiResponse deleteCategory(long id) {
+		apiResponse.resetResponse();
 		if(categoryRepo.findById(id).isEmpty()) {
 			 throw new IdNotFound("Category Id not Found");
 		}
 		categoryRepo.deleteById(id);
-		String msg="Id "+ id +" Deleted Successfully";
-		apiResponse.setData(msg);
-		apiResponse.setStatus(HttpStatus.OK.value());
-		apiResponse.setError(null);
+		apiResponse.setData("Id "+ id +" Deleted Successfully");
 		return apiResponse;
 	}
 	
 	
      public ApiResponse getActiveCategoryById(Long id){
+		 apiResponse.resetResponse();
     	 if(categoryRepo.findById(id).isEmpty()) {
 			 throw new IdNotFound("Category Id not Found");
-		}
-
+		 }
     	 boolean status=categoryRepo.getActiveCategoryById(id).isActive();
     	if(status) {
-    		apiResponse.setData(categoryRepo.getActiveCategoryById(id));
-    		apiResponse.setStatus(HttpStatus.OK.value());
-    		apiResponse.setError(null);
-    		 }
+			apiResponse.setData(categoryRepo.getActiveCategoryById(id));
+		}
     	 else {
-    		 apiResponse.setData(null);
-    		 apiResponse.setStatus(HttpStatus.OK.value());
-    		 apiResponse.setError("category is inactive ");
-    		 }
+			apiResponse.setError("category is inactive ");
+		}
     	 return apiResponse;
      }
 
 	public ApiResponse saveSubCategoryForCategory(SubCategory subCategory, long id) {
+		apiResponse.resetResponse();
 		if(categoryRepo.findById(id).isPresent()) {
 			Category category = categoryRepo.findById(id).get();
 			category.getSubCategory().add(subCategoryRepo.save(subCategory));
 			apiResponse.setData(categoryRepo.save(category));
-			apiResponse.setError(null);
-			apiResponse.setStatus(HttpStatus.OK.value());
-		}
-		else{
+			}
+		else
 			throw new IdNotFound("Category Id not exist");
-		}
 		return  apiResponse;
 	}
 }

@@ -6,7 +6,6 @@ import java.util.Objects;
 
 import com.codingmart.categorymicroservice.repository.ChildCategoryRepository;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.codingmart.categorymicroservice.entity.ChildCategory;
@@ -28,96 +27,74 @@ public class ChildCategoryService {
 		}
 		
 		public ApiResponse saveChildCategory(ChildCategory childCategory) {
-		//	ChildCategory childCategory1=childCategoryRepo.findByName(childCategory.getName());
+			apiResponse.resetResponse();
 			if(Objects.isNull(childCategoryRepo.findByName(childCategory.getName()))) {
-				//ChildCategory childCategory2=childCategoryRepo.save(childCategory);
 			    apiResponse.setData(childCategoryRepo.save(childCategory));
-				apiResponse.setStatus(HttpStatus.OK.value());
-				apiResponse.setError(null);
 			}
 			else {
-				apiResponse.setStatus(HttpStatus.OK.value());
-				apiResponse.setData(null);
-				apiResponse.setError("id already present");
+				apiResponse.setError("ChildCategory already Exist");
 			}
 			return apiResponse;
 		}
 		
 		public ApiResponse saveAllChildCategory(List<ChildCategory> childCategories){
+			apiResponse.resetResponse();
 			for(ChildCategory childCategory : childCategories)
 			{
 				ChildCategory childCategory1=childCategoryRepo.findByName(childCategory.getName());
-				if(Objects.isNull(childCategory1)) {
-					childCategoryRepo.save(childCategory);
-				}
+				if(Objects.isNull(childCategory1))
+					apiResponse.setData(childCategoryRepo.save(childCategory));
 			}
-			//childCategoryRepo.saveAll(childCategories);
-			apiResponse.setData(childCategories);
-			apiResponse.setStatus(HttpStatus.OK.value());
-			apiResponse.setError(null);
 			return apiResponse;
 		}
 		public ApiResponse getAllChildCategory() {
-			 List<ChildCategory> childCategory=childCategoryRepo.findAll();
+			apiResponse.resetResponse();
+			List<ChildCategory> childCategory=childCategoryRepo.findAll();
 			 if(childCategory.isEmpty()) {
-				 throw new IdNotFound("no ChildCategories Present");
+				 throw new IdNotFound("No ChildCategories Present");
 			 }
 			apiResponse.setData(childCategoryRepo.findAll());
-			apiResponse.setStatus(HttpStatus.OK.value());
-			apiResponse.setError(null);
 			return apiResponse;
 		}
 		
 		public ApiResponse getChildCategoryById(long id) {
+			apiResponse.resetResponse();
 			if(childCategoryRepo.findById(id).isEmpty()) {
-				 throw new IdNotFound("Product Id not Found");
+				 throw new IdNotFound("ChildCategory not Found");
 			}
-			childCategoryRepo.findById(id).get();
-			
-				boolean status=childCategoryRepo.findById(id).get().isActive();
-				if(status) {
-					apiResponse.setData(childCategoryRepo.findById(id).get());
-					apiResponse.setStatus(HttpStatus.OK.value());
-					apiResponse.setError(null);
-					}
-				else {
-					apiResponse.setData(null);
-					apiResponse.setStatus(HttpStatus.OK.value());
-					apiResponse.setError("childcategory not present");
-				}
-				return apiResponse;
-				}
-			
-			
-		
-//		public ApiResponse getchildCategoryByName(String name) {
-//		ChildCategory cc=childCategoryRepo.findByName(name);
-//			apiResponse.setData(cc);
-	//	apiResponse.setStatus(HttpStatus.OK.value());
-		//apiResponse.setError(null);
-//			return apiResponse;
-//		}
+			boolean status=childCategoryRepo.findById(id).get().isActive();
+			if(status) {
+				apiResponse.setData(childCategoryRepo.findById(id).get());
+			}
+			else {
+			     apiResponse.setError("ChildCategory not present");
+			}
+			return apiResponse;
+		}
+
+		public ApiResponse getChildCategoryByName(String name) {
+			apiResponse.resetResponse();
+			apiResponse.setData(childCategoryRepo.findByName(name));
+			return apiResponse;
+		}
 		public ApiResponse updateChildCategory(ChildCategory childCategory,Long id) {
+			apiResponse.resetResponse();
 			 if(childCategoryRepo.findById(id).isEmpty()){
-		            throw new IdNotFound("Product Id not Found");
+		            throw new IdNotFound("ChildCategory not Found");
 		       }
 			ChildCategory existingChild=childCategoryRepo.findById(id).get();
 			existingChild.setName(childCategory.getName());
 			existingChild.setActive(childCategory.isActive());
 			apiResponse.setData(childCategoryRepo.save(existingChild));
-			apiResponse.setStatus(HttpStatus.OK.value());
-			apiResponse.setError(null);
-			   return apiResponse;
+			return apiResponse;
 		}
 		public ApiResponse deleteChildCategory(long id) {
+			apiResponse.resetResponse();
 			if(childCategoryRepo.findById(id).isEmpty()) {
-				 throw new IdNotFound("Product Id not Found");
+				 throw new IdNotFound("ChildCategory not Found");
 			}
 			childCategoryRepo.deleteById(id);
-			String msg="Id "+ id +" Deleted Successfully";
-			apiResponse.setData(msg);
-			apiResponse.setStatus(HttpStatus.OK.value());
-			apiResponse.setError(null);
+			apiResponse.setData("Id "+ id +" Deleted Successfully");
 			 return apiResponse;
 		}
 		

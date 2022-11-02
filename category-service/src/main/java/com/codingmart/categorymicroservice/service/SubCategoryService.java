@@ -29,114 +29,94 @@ public class SubCategoryService
 	}
 	
 	public ApiResponse saveSubCategory(SubCategory subCategory) {
-
-		SubCategory subCategory1=subCategoryRepo.findByName(subCategory.getName());
-		if(Objects.isNull(subCategory1)) {
-
-			SubCategory subCategory2=subCategoryRepo.save(subCategory);
-			apiResponse.setData(subCategory2);
-			apiResponse.setStatus(HttpStatus.OK.value());
-			apiResponse.setError(null);
-
+		apiResponse.resetResponse();
+		if(Objects.isNull(subCategoryRepo.findByName(subCategory.getName()))) {
+			apiResponse.setData(subCategoryRepo.save(subCategory));
 		}
 		else {
-			apiResponse.setData(null);
-			apiResponse.setStatus(HttpStatus.OK.value());
-			apiResponse.setError("id already exist");
+			apiResponse.setError("SubCategory already exist");
 		}
-		System.out.println(apiResponse.getData());
-			return  apiResponse;
+		return  apiResponse;
 	}
 	
 	public ApiResponse saveAllSubCategory(List<SubCategory> subCategories){
-
-		for(SubCategory subcategory : subCategories)
-		{
-			SubCategory subCategory1=subCategoryRepo.findByName(subcategory.getName());
-			if(Objects.isNull(subCategory1)) {
-				subCategoryRepo.save(subcategory);
+		apiResponse.resetResponse();
+		for(SubCategory subcategory : subCategories) {
+			if(Objects.isNull(subCategoryRepo.findByName(subcategory.getName()))) {
+				apiResponse.setData(subCategoryRepo.save(subcategory));
 			}
-
 		}
-		//subCategoryRepo.saveAll(subCategories);
-		apiResponse.setData(subCategories);
-		apiResponse.setStatus(HttpStatus.OK.value());
-		apiResponse.setError(null);
 		return apiResponse;
 	}
 	public ApiResponse getAllSubCategory() {
+		apiResponse.resetResponse();
 		List<SubCategory> subCategories=subCategoryRepo.findAll();
 		if(subCategories.isEmpty()) {
-			throw new IdNotFound("no Subategories Present");
+			throw new IdNotFound("No SubCategories Exist");
 		}
 		apiResponse.setData(subCategories);
-		apiResponse.setStatus(HttpStatus.OK.value());
-		apiResponse.setError(null);
 		return apiResponse;
 	}
 	public ApiResponse getSubCategoryById(long id) {
+		apiResponse.resetResponse();
 		if(subCategoryRepo.findById(id).isEmpty()) {
-			 throw new IdNotFound("Product Id not Found");
+			 throw new IdNotFound("SubCategories not Found");
 		}
-		subCategoryRepo.findById(id).get();
-		apiResponse.setData(subCategoryRepo.findById(id).get());
-		apiResponse.setStatus(HttpStatus.OK.value());
-		apiResponse.setError(null);
+		boolean status=subCategoryRepo.findById(id).get().isActive();
+		if(status) {
+			apiResponse.setData(subCategoryRepo.findById(id).get());
+		}
+		else {
+
+			apiResponse.setError("SubCategory not Exist");
+		}
 		return apiResponse;
 	}
-//	public ApiResponse getsubCategoryByName(String name) {
-//	 SubCategorys s= subCategoryRepo.findByName(name);
-//	    apiResponse.setData(s);
-//	apiResponse.setStatus(HttpStatus.OK.value());
-//	apiResponse.setError(null);
-//		return apiResponse;
-//	}
+	public ApiResponse getSubCategoryByName(String name) {
+		apiResponse.resetResponse();
+	    apiResponse.setData(subCategoryRepo.findByName(name));
+		return apiResponse;
+	}
 	public ApiResponse updateSubCategory(SubCategory subCategory,Long id) {
+		apiResponse.resetResponse();
 		if(subCategoryRepo.findById(id).isEmpty()) {
-			throw new IdNotFound("Id not found to update");
+			throw new IdNotFound("SubCategory not found to update");
 		}
 		SubCategory existing=subCategoryRepo.findById(id).get();
 		existing.setName(subCategory.getName());
 		existing.setActive(subCategory.isActive());
 		apiResponse.setData(subCategoryRepo.save(existing));
-		apiResponse.setStatus(HttpStatus.OK.value());
-		apiResponse.setError(null);
 		   return apiResponse;
 	}
 	public ApiResponse deleteSubCategory(long id) {
+		apiResponse.resetResponse();
 		if(subCategoryRepo.findById(id).isEmpty()) {
-			 throw new IdNotFound("Product Id not Found");
+			 throw new IdNotFound("SubCategory not Found");
 		}
 		 subCategoryRepo.deleteById(id);
-		 String mes=" Id "+ id +" Deleted Successfully";
-		 apiResponse.setData(mes);
-		 apiResponse.setStatus(HttpStatus.OK.value());
-			apiResponse.setError(null);
+		 apiResponse.setData("Id "+ id +" Deleted Successfully");
 		 return apiResponse;
 	}
 	
 	//fetching all data 
 	
 	public ApiResponse getAllSubCategoriesFromCategoryId(long id){
+		apiResponse.resetResponse();
 		if(subCategoryRepo.getAllSubCategoriesFromCategoryId(id).isEmpty()) {
 			 throw new IdNotFound("No SubCategory found for the given Category Id");
 		}
-		List<SubCategory> sb=subCategoryRepo.getAllSubCategoriesFromCategoryId(id);
-			apiResponse.setData(sb);
-			apiResponse.setStatus(HttpStatus.OK.value());
-			apiResponse.setError(null);
-		
+		List<SubCategory> subCategoryList=subCategoryRepo.getAllSubCategoriesFromCategoryId(id);
+			apiResponse.setData(subCategoryList);
+
 		return apiResponse;
 	}
 
 	public ApiResponse saveChildCategoryForSubcategory(ChildCategory childCategory, long id) {
+		apiResponse.resetResponse();
 		if(subCategoryRepo.findById(id).isPresent()) {
 			SubCategory subCategory = subCategoryRepo.findById(id).get();
 			subCategory.getChildCategory().add(childCategoryRepo.save(childCategory));
-//		System.out.println(subCategory);
 			apiResponse.setData(subCategoryRepo.save(subCategory));
-			apiResponse.setError(null);
-			apiResponse.setStatus(HttpStatus.OK.value());
 		}
 		else{
 			throw new  IdNotFound("Id not exist");
