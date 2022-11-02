@@ -40,7 +40,7 @@ public class FilterService {
     public GenericResponse getProductsByBrand(List<HashMap> products, String brandName) {
         List<HashMap> filteredProducts=new ArrayList<>();
         for(HashMap product:products) {
-            if(product.get("brand").get("name").equals(brandName))
+            if(product.get("name").equals(brandName))
                 filteredProducts.add(product);
         }
         genericResponse.setData(filteredProducts);

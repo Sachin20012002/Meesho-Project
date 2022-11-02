@@ -39,7 +39,7 @@ public class FilterController {
 
     @GetMapping("/brand/{brandName}")
     public GenericResponse getProductsByBrand(@PathVariable("brandName") String brandName){
-        GenericRequest genericRequest= restTemplate.getForObject("http://192.168.1.76:9191/meesho-productmicroservice/products",GenericRequest.class);
+        GenericRequest genericRequest= restTemplate.getForObject("http://192.168.1.76:9191/meesho-productmicroservice/brands",GenericRequest.class);
         List<HashMap> products= (List<HashMap>) genericRequest.getData();
         return filterService.getProductsByBrand(products,brandName);
     }
