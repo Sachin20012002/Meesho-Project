@@ -44,4 +44,11 @@ public class FilterController {
         return filterService.getProductsByBrand(products,brandName);
     }
 
+    @GetMapping("/price/{price}")
+    public GenericResponse getProductsByPrice(@PathVariable("price") Double price){
+        GenericRequest genericRequest= restTemplate.getForObject("http://192.168.1.76:9191/meesho-productmicroservice/products",GenericRequest.class);
+        List<HashMap> products= (List<HashMap>) genericRequest.getData();
+        return filterService.getProductsByPrice(products,price);
+    }
+
 }

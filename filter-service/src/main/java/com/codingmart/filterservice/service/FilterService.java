@@ -20,14 +20,14 @@ public class FilterService {
     }
 
     public GenericResponse getProductsByColor(List<HashMap> products, String color) {
-        List<HashMap> filteredProducts=new ArrayList<>();
+        List<HashMap> filteredProducts = new ArrayList<>();
 //        for(int i=0;i<products.size();i++){
 //            if(products.get(i).getColor().equals(color)){
 //                filteredProducts.add(products.get(i));
 //            }
 //        }
-        for(HashMap product:products){
-            if(product.get("color").equals(color)) {
+        for (HashMap product : products) {
+            if (product.get("color").equals(color)) {
                 filteredProducts.add(product);
                 System.out.println(product);
             }
@@ -38,9 +38,21 @@ public class FilterService {
     }
 
     public GenericResponse getProductsByBrand(List<HashMap> products, String brandName) {
-        List<HashMap> filteredProducts=new ArrayList<>();
-        for(HashMap product:products) {
-            if(product.get("name").equals(brandName))
+        List<HashMap> filteredProducts = new ArrayList<>();
+        for (HashMap product : products) {
+            if (product.get("name").equals(brandName))
+                filteredProducts.add(product);
+        }
+        genericResponse.setData(filteredProducts);
+        return genericResponse;
+    }
+
+
+    public GenericResponse getProductsByPrice(List<HashMap> products, Double price) {
+        List<HashMap> filteredProducts = new ArrayList<>();
+        for (HashMap product : products) {
+            double productPrice = Double.parseDouble(product.get("price").toString());
+            if (productPrice < price)
                 filteredProducts.add(product);
         }
         genericResponse.setData(filteredProducts);

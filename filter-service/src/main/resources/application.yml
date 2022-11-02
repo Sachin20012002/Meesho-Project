@@ -1,8 +1,8 @@
 server:
-  port: 9003
+    port: 9003
+    servlet:
+        context-path: /meesho-filtermicroservice
 
 spring:
-  application:
-    name: FILTER-SERVICE
-
-
+    application:
+        name: FILTER-SERVICE

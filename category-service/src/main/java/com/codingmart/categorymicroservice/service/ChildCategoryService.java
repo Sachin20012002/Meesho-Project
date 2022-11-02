@@ -28,10 +28,10 @@ public class ChildCategoryService {
 		}
 		
 		public ApiResponse saveChildCategory(ChildCategory childCategory) {
-			ChildCategory childCategory1=childCategoryRepo.findByName(childCategory.getName());
-			if(Objects.isNull(childCategory1)) {
-				ChildCategory childCategory2=childCategoryRepo.save(childCategory);
-			    apiResponse.setData(childCategory2);
+		//	ChildCategory childCategory1=childCategoryRepo.findByName(childCategory.getName());
+			if(Objects.isNull(childCategoryRepo.findByName(childCategory.getName()))) {
+				//ChildCategory childCategory2=childCategoryRepo.save(childCategory);
+			    apiResponse.setData(childCategoryRepo.save(childCategory));
 				apiResponse.setStatus(HttpStatus.OK.value());
 				apiResponse.setError(null);
 			}
