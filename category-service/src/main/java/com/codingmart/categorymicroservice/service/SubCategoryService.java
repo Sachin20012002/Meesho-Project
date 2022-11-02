@@ -1,30 +1,26 @@
 package com.codingmart.categorymicroservice.service;
 
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Objects;
 
-import com.codingmart.categorymicroservice.entity.Category;
 import com.codingmart.categorymicroservice.entity.ChildCategory;
 import com.codingmart.categorymicroservice.entity.SubCategory;
-import com.codingmart.categorymicroservice.repository.CategoryRepository;
 import com.codingmart.categorymicroservice.repository.ChildCategoryRepository;
 import com.codingmart.categorymicroservice.repository.SubCategoryRepository;
 import com.codingmart.categorymicroservice.response.ApiResponse;
 import com.codingmart.categorymicroservice.response.IdNotFound;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SubCategoryService {
+public class SubCategoryService
+{
 
-	private SubCategoryRepository subCategoryRepo;
-	private ApiResponse apiResponse;
-	private ChildCategoryRepository childCategoryRepo;
+	private final SubCategoryRepository subCategoryRepo;
+	private final ApiResponse apiResponse;
+	private final ChildCategoryRepository childCategoryRepo;
 
-
-	private Category category;
 	
 	public SubCategoryService(SubCategoryRepository subCategoryRepo,ApiResponse apiResponse,ChildCategoryRepository childCategoryRepo) {
 		this.subCategoryRepo=subCategoryRepo;
@@ -53,15 +49,14 @@ public class SubCategoryService {
 	}
 	
 	public ApiResponse saveAllSubCategory(List<SubCategory> subCategories){
+
 		for(SubCategory subcategory : subCategories)
 		{
 			SubCategory subCategory1=subCategoryRepo.findByName(subcategory.getName());
 			if(Objects.isNull(subCategory1)) {
 				subCategoryRepo.save(subcategory);
 			}
-			else {
-				continue;
-			}
+
 		}
 		//subCategoryRepo.saveAll(subCategories);
 		apiResponse.setData(subCategories);
@@ -135,12 +130,17 @@ public class SubCategoryService {
 	}
 
 	public ApiResponse saveChildCategoryForSubcategory(ChildCategory childCategory, long id) {
-		SubCategory subCategory = subCategoryRepo.findById(id).get();
-		subCategory.getChildCategory().add(childCategoryRepo.save(childCategory));
+		if(subCategoryRepo.findById(id).isPresent()) {
+			SubCategory subCategory = subCategoryRepo.findById(id).get();
+			subCategory.getChildCategory().add(childCategoryRepo.save(childCategory));
 //		System.out.println(subCategory);
-		apiResponse.setData(subCategoryRepo.save(subCategory));
-		apiResponse.setError(null);
-		apiResponse.setStatus(HttpStatus.OK.value());
+			apiResponse.setData(subCategoryRepo.save(subCategory));
+			apiResponse.setError(null);
+			apiResponse.setStatus(HttpStatus.OK.value());
+		}
+		else{
+			throw new  IdNotFound("Id not exist");
+		}
 		return  apiResponse;
 	}
 }

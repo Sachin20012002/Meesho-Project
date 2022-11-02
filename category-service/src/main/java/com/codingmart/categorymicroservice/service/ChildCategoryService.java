@@ -1,14 +1,11 @@
 package com.codingmart.categorymicroservice.service;
 
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Objects;
 
-import com.codingmart.categorymicroservice.entity.Category;
-import com.codingmart.categorymicroservice.entity.SubCategory;
 import com.codingmart.categorymicroservice.repository.ChildCategoryRepository;
-import com.codingmart.categorymicroservice.repository.SubCategoryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -20,13 +17,11 @@ import com.codingmart.categorymicroservice.response.IdNotFound;
 public class ChildCategoryService {
 	
 
-		private ChildCategoryRepository childCategoryRepo;
-		private ApiResponse apiResponse;
+		private final ChildCategoryRepository childCategoryRepo;
+		private final ApiResponse apiResponse;
 
 
 
-	    @Autowired
-		private  SubCategoryRepository subCategoryRepo;
 		public ChildCategoryService(ChildCategoryRepository childCategoryRepo,ApiResponse apiResponse) {
 			this.childCategoryRepo=childCategoryRepo;
 			this.apiResponse=apiResponse;
@@ -55,9 +50,6 @@ public class ChildCategoryService {
 				if(Objects.isNull(childCategory1)) {
 					childCategoryRepo.save(childCategory);
 				}
-				else {
-					continue;
-				}
 			}
 			//childCategoryRepo.saveAll(childCategories);
 			apiResponse.setData(childCategories);
@@ -83,7 +75,7 @@ public class ChildCategoryService {
 			childCategoryRepo.findById(id).get();
 			
 				boolean status=childCategoryRepo.findById(id).get().isActive();
-				if(status==true) {
+				if(status) {
 					apiResponse.setData(childCategoryRepo.findById(id).get());
 					apiResponse.setStatus(HttpStatus.OK.value());
 					apiResponse.setError(null);

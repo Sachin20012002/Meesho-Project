@@ -15,9 +15,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class CategoryService {
 
-	private CategoryRepository categoryRepo;
-	private SubCategoryRepository subCategoryRepo;
-	private ApiResponse apiResponse;
+	private final CategoryRepository categoryRepo;
+	private final SubCategoryRepository subCategoryRepo;
+	private final ApiResponse apiResponse;
 	
 	public CategoryService(CategoryRepository categoryRepo,ApiResponse apiResponse,SubCategoryRepository subCategoryRepo) {
 		this.categoryRepo=categoryRepo;
@@ -27,10 +27,11 @@ public class CategoryService {
 	
 
 	public ApiResponse saveCategory(Category category) {
+
 		Category category1=categoryRepo.findByName(category.getName());
 		if(Objects.isNull(category1)) {
-		Category category2 =categoryRepo.save(category);
-		apiResponse.setData(category2);
+		//Category category2 =categoryRepo.save(category);
+		apiResponse.setData(categoryRepo.save(category));
 		apiResponse.setStatus(HttpStatus.OK.value());
 		apiResponse.setError(null);
 		}
@@ -38,9 +39,10 @@ public class CategoryService {
 			apiResponse.setStatus(HttpStatus.OK.value());
 			apiResponse.setData(null);
 			apiResponse.setError("id already exist");
-		}	
+		}
 		return apiResponse;
 	}
+
 	
 	public ApiResponse saveAllCategory(List<Category> categories){
 		for(Category category : categories)
@@ -48,9 +50,6 @@ public class CategoryService {
 			Category category1=categoryRepo.findByName(category.getName());
 			if(Objects.isNull(category1)) {
 				categoryRepo.save(category);
-			}
-			else {
-				continue;
 			}
 		}
 		apiResponse.setData(categories);
@@ -122,7 +121,7 @@ public class CategoryService {
 		}
     	// Category cy=categoryRepo.getActiveCategoryById(id);
     	 boolean status=categoryRepo.getActiveCategoryById(id).isActive();
-    	if(status==true) {
+    	if(status) {
     		apiResponse.setData(categoryRepo.getActiveCategoryById(id));
     		apiResponse.setStatus(HttpStatus.OK.value());
     		apiResponse.setError(null);
@@ -136,11 +135,16 @@ public class CategoryService {
      }
 
 	public ApiResponse saveSubCategoryForCategory(SubCategory subCategory, long id) {
-		Category category = categoryRepo.findById(id).get();
-		category.getSubCategory().add(subCategoryRepo.save(subCategory));
-		apiResponse.setData(categoryRepo.save(category));
-		apiResponse.setError(null);
-		apiResponse.setStatus(HttpStatus.OK.value());
+		if(categoryRepo.findById(id).isPresent()) {
+			Category category = categoryRepo.findById(id).get();
+			category.getSubCategory().add(subCategoryRepo.save(subCategory));
+			apiResponse.setData(categoryRepo.save(category));
+			apiResponse.setError(null);
+			apiResponse.setStatus(HttpStatus.OK.value());
+		}
+		else{
+			throw new IdNotFound("Category Id not exist");
+		}
 		return  apiResponse;
 	}
 }

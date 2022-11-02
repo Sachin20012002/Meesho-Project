@@ -7,9 +7,10 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="filter-service" />
         <module name="product-microservice" />
+        <module name="category-service" />
         <module name="cloud-config-server" />
+        <module name="filter-service" />
         <module name="category-microservice" />
         <module name="cloud-gateway" />
         <module name="service-registry" />

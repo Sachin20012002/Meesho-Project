@@ -12,8 +12,8 @@ public interface SubCategoryRepository extends JpaRepository<SubCategory, Long> 
 
 	@Query(value="select * from sub_category where category_id =:c",nativeQuery=true) 
 	// get all childCategory inside this subcategory
-	public List<SubCategory> getAllSubCategoriesFromCategoryId(@Param("c") long id);
+	 List<SubCategory> getAllSubCategoriesFromCategoryId(@Param("c") long id);
 
 	
-	public SubCategory findByName(String name);
+	 SubCategory findByName(String name);
 }

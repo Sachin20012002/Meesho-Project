@@ -1,20 +1,16 @@
 package com.codingmart.categorymicroservice.entity;
 
+import com.codingmart.categorymicroservice.audit.Auditable;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table
-public class Category {
+@EntityListeners(AuditingEntityListener.class)
+public class Category extends Auditable {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
