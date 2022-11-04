@@ -5,6 +5,7 @@ import com.codingmart.filterservice.service.FilterService;
 import com.codingmart.productmicroservice.custom.GenericResponse;
 import com.codingmart.productmicroservice.entity.Product;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,18 +38,26 @@ public class FilterController {
         return filterService.getProductsByColor(products,color);
     }
 
-    @GetMapping("/brand/{brandName}")
-    public GenericResponse getProductsByBrand(@PathVariable("brandName") String brandName){
-        GenericRequest genericRequest= restTemplate.getForObject("http://192.168.1.76:9191/meesho-productmicroservice/brands",GenericRequest.class);
-        List<HashMap> products= (List<HashMap>) genericRequest.getData();
-        return filterService.getProductsByBrand(products,brandName);
-    }
+//    @GetMapping("/brand/{brandName}")
+//    public GenericResponse getProductsByBrand(@PathVariable("brandName") String brandName){
+//        GenericRequest genericRequest= restTemplate.getForObject("http://192.168.1.76:9191/meesho-productmicroservice/products",GenericRequest.class);
+//        List<HashMap> products= (List<HashMap>) genericRequest.getData();
+//        return filterService.getProductsByBrand(products,brandName);
+//    }
 
     @GetMapping("/price/{price}")
     public GenericResponse getProductsByPrice(@PathVariable("price") Double price){
         GenericRequest genericRequest= restTemplate.getForObject("http://192.168.1.76:9191/meesho-productmicroservice/products",GenericRequest.class);
         List<HashMap> products= (List<HashMap>) genericRequest.getData();
         return filterService.getProductsByPrice(products,price);
+    }
+
+    @GetMapping("/brand/{brandName}")
+    public GenericResponse getProductsByBrand(@PathVariable("brandName") String brandName){
+        ResponseEntity<Product[]> productResponse= restTemplate.getForEntity("http://192.168.1.76:9191/meesho-productmicroservice/products/filter",Product[].class);
+        Product[] products=productResponse.getBody();
+        return filterService.getProductsByBrand(products,brandName);
+
     }
 
 }

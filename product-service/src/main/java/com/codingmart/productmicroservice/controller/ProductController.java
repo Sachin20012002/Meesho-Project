@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/products")
@@ -83,7 +84,10 @@ public class ProductController {
         return genericResponse;
      }
 */
-
+   @GetMapping("/filter")
+    public List<Product> getAllProductsForFilterService(){
+       return productService.getAllProducts();
+   }
 
 
 }
