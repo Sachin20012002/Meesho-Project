@@ -1,17 +1,16 @@
 package com.codingmart.categorymicroservice.service;
 
 
-import java.util.List;
-import java.util.Objects;
-
-import com.codingmart.categorymicroservice.entity.SubCategory;
+import com.codingmart.categorymicroservice.entity.ChildCategory;
 import com.codingmart.categorymicroservice.repository.ChildCategoryRepository;
-
+import com.codingmart.categorymicroservice.response.ApiResponse;
+import com.codingmart.categorymicroservice.response.ErrorResponse;
+import com.codingmart.categorymicroservice.response.IdNotFound;
 import org.springframework.stereotype.Service;
 
-import com.codingmart.categorymicroservice.entity.ChildCategory;
-import com.codingmart.categorymicroservice.response.ApiResponse;
-import com.codingmart.categorymicroservice.response.IdNotFound;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class ChildCategoryService {
@@ -33,7 +32,7 @@ public class ChildCategoryService {
 			    apiResponse.setData(childCategoryRepo.save(childCategory));
 			}
 			else {
-				apiResponse.setError("ChildCategory already Exist");
+				apiResponse.setError(new ErrorResponse("ChildCategory already Exist","Avoid Duplicate Entry"));
 			}
 			return apiResponse;
 		}
@@ -63,13 +62,7 @@ public class ChildCategoryService {
 			if(childCategoryRepo.findById(id).isEmpty()) {
 				 throw new IdNotFound("ChildCategory not Found");
 			}
-			boolean status=childCategoryRepo.findById(id).get().isActive();
-			if(status) {
-				apiResponse.setData(childCategoryRepo.findById(id).get());
-			}
-			else {
-			     apiResponse.setError("ChildCategory not present");
-			}
+			apiResponse.setData(childCategoryRepo.findById(id).get());
 			return apiResponse;
 		}
 
@@ -110,6 +103,18 @@ public class ChildCategoryService {
 
 		return apiResponse;
 	}
+
+	public ApiResponse getAllActiveChildCategory() {
+		apiResponse.resetResponse();
+		List<ChildCategory> childCategories=childCategoryRepo.findAll();
+		List<ChildCategory> activeChildCategories=childCategories.stream().filter((i)->i.isActive()).collect(Collectors.toList());
+		if(childCategories.isEmpty()) {
+			throw new IdNotFound("No ChildCategories Present");
+		}
+		apiResponse.setData(activeChildCategories);
+		return apiResponse;
+
 	}
+}
 
 

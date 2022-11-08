@@ -60,6 +60,10 @@ public class ChildCategoryController {
 		return childCategoryService.getAllChildCategoriesFromSubCategoryId(id);
 		}
 
+	@GetMapping("/active")
+	public ApiResponse getAllActiveChildCategory(){
+		return childCategoryService.getAllActiveChildCategory();
+	}
 
 	}
         
