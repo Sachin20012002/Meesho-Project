@@ -54,19 +54,16 @@ public class ChildCategoryController {
 		return childCategoryService.getAllChildCategoriesFromSubCategoryId(id);
 		}
 
-	@GetMapping("/active")
-	public ApiResponse getAllActiveChildCategory(){
+		@GetMapping("/active")
+		public ApiResponse getAllActiveChildCategory(){
 		return childCategoryService.getAllActiveChildCategory();
-	}
+		}
 
-	@GetMapping("/products/{id}")
-	public ApiResponse getAllProductsByChildCategoryId(@PathVariable("id") long id){
+		@GetMapping("/products/{id}")
+		public ApiResponse getAllProductsByChildCategoryId(@PathVariable("id") long id){
 
 		apiResponse.setData(childCategoryService.getAllProductsByChildCategoryId(id));
 		return apiResponse;
-	}
-
-
-
+		}
 	}
         
