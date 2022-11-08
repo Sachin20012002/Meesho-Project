@@ -9,8 +9,8 @@ import com.codingmart.categorymicroservice.entity.SubCategory;
 import com.codingmart.categorymicroservice.repository.ChildCategoryRepository;
 import com.codingmart.categorymicroservice.repository.SubCategoryRepository;
 import com.codingmart.categorymicroservice.response.ApiResponse;
+import com.codingmart.categorymicroservice.response.ErrorResponse;
 import com.codingmart.categorymicroservice.response.IdNotFound;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -34,7 +34,8 @@ public class SubCategoryService
 			apiResponse.setData(subCategoryRepo.save(subCategory));
 		}
 		else {
-			apiResponse.setError("SubCategory already exist");
+			apiResponse.setError(new ErrorResponse("SubCategory already exist","Avoid Duplicate entry"));
+
 		}
 		return  apiResponse;
 	}
@@ -62,14 +63,8 @@ public class SubCategoryService
 		if(subCategoryRepo.findById(id).isEmpty()) {
 			 throw new IdNotFound("SubCategories not Found");
 		}
-		boolean status=subCategoryRepo.findById(id).get().isActive();
-		if(status) {
-			apiResponse.setData(subCategoryRepo.findById(id).get());
-		}
-		else {
+		apiResponse.setData(subCategoryRepo.findById(id).get());
 
-			apiResponse.setError("SubCategory not Exist");
-		}
 		return apiResponse;
 	}
 	public ApiResponse getSubCategoryByName(String name) {
