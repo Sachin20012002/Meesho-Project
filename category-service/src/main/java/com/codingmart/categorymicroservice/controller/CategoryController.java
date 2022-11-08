@@ -12,10 +12,12 @@ import java.util.List;
 @RequestMapping("/categories")
 public class CategoryController {
 
-	private CategoryService categoryService;
+	private final CategoryService categoryService;
+	private final ApiResponse apiResponse;
 	
-	public CategoryController(CategoryService categoryService) {
+	public CategoryController(CategoryService categoryService, ApiResponse apiResponse) {
 		this.categoryService=categoryService;
+		this.apiResponse = apiResponse;
 	}
 
 	@PostMapping()
@@ -73,7 +75,8 @@ public class CategoryController {
 	}
 	@GetMapping("/products/{id}")
 	public ApiResponse getAllProductsFromCategoryId(@PathVariable("id") long id){
-		return categoryService.getAllProductsFromCategoryId(id);
+		apiResponse.setData(categoryService.getAllProductsFromCategoryId(id));
+		return apiResponse;
 	}
 
 }

@@ -2,6 +2,7 @@ package com.codingmart.categorymicroservice.service;
 
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -123,14 +124,13 @@ public class SubCategoryService
 		return  apiResponse;
 	}
 
-	public ApiResponse getAllProductsFromSubCategoryId(long id) {
+	public List<Product> getAllProductsFromSubCategoryId(long id) {
 		List<ChildCategory> childCategories=((SubCategory)getSubCategoryById(id).getData()).getChildCategory();
 		List<Product> products=new ArrayList<>();
 		for (ChildCategory childCategory:childCategories){
-			products.add((Product) childCategoryService.getAllProductsByChildCategoryId(childCategory.getId()).getData());
+			products.addAll(List.of(childCategoryService.getAllProductsByChildCategoryId(childCategory.getId())));
 		}
-		apiResponse.resetResponse();
-		apiResponse.setData(products);
-		return apiResponse;
+
+		return products;
 	}
 }

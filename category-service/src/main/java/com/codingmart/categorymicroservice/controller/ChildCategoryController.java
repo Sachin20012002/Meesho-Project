@@ -4,7 +4,6 @@ import com.codingmart.categorymicroservice.entity.ChildCategory;
 import com.codingmart.categorymicroservice.response.ApiResponse;
 import com.codingmart.categorymicroservice.service.ChildCategoryService;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -13,10 +12,12 @@ import java.util.List;
 public class ChildCategoryController {
 
 		private final ChildCategoryService childCategoryService;
+		private final ApiResponse apiResponse;
 
 		
-		public ChildCategoryController(ChildCategoryService childCategoryService) {
+		public ChildCategoryController(ChildCategoryService childCategoryService, ApiResponse apiResponse) {
 			this.childCategoryService=childCategoryService;
+			this.apiResponse = apiResponse;
 		}
 		
 		@PostMapping()
@@ -58,9 +59,11 @@ public class ChildCategoryController {
 		return childCategoryService.getAllActiveChildCategory();
 	}
 
-	@GetMapping("/products/id")
+	@GetMapping("/products/{id}")
 	public ApiResponse getAllProductsByChildCategoryId(@PathVariable("id") long id){
-		return childCategoryService.getAllProductsByChildCategoryId(id);
+
+		apiResponse.setData(childCategoryService.getAllProductsByChildCategoryId(id));
+		return apiResponse;
 	}
 
 

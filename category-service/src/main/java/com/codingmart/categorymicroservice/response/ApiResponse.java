@@ -20,10 +20,12 @@ public class ApiResponse {
 	}
 
 	public void resetResponse(){
+		System.out.println(data);
 		this.code=HttpStatus.OK.value();
 		this.status=HttpStatus.OK;
 		this.data=null;
 		this.error=null;
+		System.out.println(data);
 
 	}
 }

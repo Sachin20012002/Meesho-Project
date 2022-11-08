@@ -141,14 +141,12 @@ public class CategoryService {
 		return apiResponse;
 	}
 
-    public ApiResponse getAllProductsFromCategoryId(long id) {
+    public List<Product> getAllProductsFromCategoryId(long id) {
 		List<SubCategory> subCategories=((Category)getCategoryById(id).getData()).getSubCategory();
 		List<Product> products=new ArrayList<>();
 		for (SubCategory subCategory:subCategories){
-			products.add((Product) subCategoryService.getAllProductsFromSubCategoryId(subCategory.getId()).getData());
+			products.addAll(subCategoryService.getAllProductsFromSubCategoryId(subCategory.getId()));
 		}
-		apiResponse.resetResponse();
-		apiResponse.setData(products);
-		return apiResponse;
+		return products;
     }
 }

@@ -21,10 +21,12 @@ import com.codingmart.categorymicroservice.service.SubCategoryService;
 public class SubCategoryController {
 	
 	private final SubCategoryService subCategoryService;
+	private final ApiResponse apiResponse;
 	
-	public SubCategoryController(SubCategoryService subCategoryService) {
+	public SubCategoryController(SubCategoryService subCategoryService, ApiResponse apiResponse) {
 
 		this.subCategoryService=subCategoryService;
+		this.apiResponse = apiResponse;
 	}
 	
 	@PostMapping()
@@ -71,6 +73,7 @@ public class SubCategoryController {
 
 	@GetMapping("/products/{id}")
 	public ApiResponse getAllProductsFromSubCategoryId(@PathVariable("id") long id){
-		return subCategoryService.getAllProductsFromSubCategoryId(id);
+		apiResponse.setData(subCategoryService.getAllProductsFromSubCategoryId(id));
+		return apiResponse;
 	}
 }

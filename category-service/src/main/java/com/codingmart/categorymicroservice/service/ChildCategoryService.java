@@ -121,12 +121,10 @@ public class ChildCategoryService {
 
 	}
 
-	public ApiResponse getAllProductsByChildCategoryId(long id) {
+	public Product[] getAllProductsByChildCategoryId(long id) {
 		ResponseEntity<Product[]> productResponse=restTemplate.getForEntity("http://192.168.1.76:9191/meesho-productmicroservice/products/child-category/active/"+id,Product[].class);
-		Product[] products= productResponse.getBody();
-		apiResponse.resetResponse();
-		apiResponse.setData(products);
-		return apiResponse;
+		return productResponse.getBody();
+
 	}
 }
 
