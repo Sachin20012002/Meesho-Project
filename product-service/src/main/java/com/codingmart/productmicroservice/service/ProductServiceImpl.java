@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl implements ProductService{
@@ -69,6 +70,7 @@ public class ProductServiceImpl implements ProductService{
 
 
     @Override
+    @Transactional
     public Product updateProduct(Long id, Product product) {
         if(productRepository.findById(id).isEmpty()){
             throw new NotFoundException("Product Id not Found");
@@ -89,14 +91,17 @@ public class ProductServiceImpl implements ProductService{
 
     private List<Image> updatedImages(List<Image> images, List<Image> existingImages) {
 
+        /* OPERATIONS DONE -> 1) adding new images,
+                              2) deleting mapped images which is not present,
+                              3) updating existing images
+         */
+
         List<Image> updatedImages=new ArrayList<>();
         HashMap<String,Image> existingImageNames=new HashMap<>();
-        HashSet<String> newImageNames=new HashSet<>();
-        for(Image image:images)
-            newImageNames.add(image.getName());
+        Set<String> newImageNames=images.stream().map(Image::getName).collect(Collectors.toSet());
         for(Image image:existingImages){
             if(!newImageNames.contains(image.getName())){
-                imageService.deleteImage(image.getId());
+                imageService.deleteImage(image.getId());  // Operation 2
             }
             else{
                 existingImageNames.put(image.getName(),image);
@@ -104,9 +109,9 @@ public class ProductServiceImpl implements ProductService{
         }
         for(Image image:images){
             if(!existingImageNames.containsKey(image.getName())){
-                updatedImages.add(imageService.addImage(image));
+                updatedImages.add(imageService.addImage(image));  // Operation 1
             }
-            else{
+            else{    // Operation 3
                 updatedImages.add(imageService.updateImage(image,existingImageNames.get(image.getName()).getId()));
             }
         }
@@ -114,6 +119,12 @@ public class ProductServiceImpl implements ProductService{
     }
 
     private List<Size> updatedAvailableSizes(List<Size> availableSizes, List<Size> existingAvailableSizes) {
+
+        /* OPERATIONS DONE -> 1) adding new sizes,
+                              2) deleting mapped sizes which is not present,
+                              3) updating existing sizes
+         */
+
         List<Size> updatedAvailableSizes=new ArrayList<>();
         HashMap<String,Size> existingSizesNames=new HashMap<>();
         HashSet<String> newSizesNames=new HashSet<>();
@@ -121,7 +132,7 @@ public class ProductServiceImpl implements ProductService{
             newSizesNames.add(size.getName());
         for(Size size:existingAvailableSizes){
             if(!newSizesNames.contains(size.getName())){
-                sizeService.deleteSize(size.getId());
+                sizeService.deleteSize(size.getId());  // OPERATION 2
             }
             else{
                 existingSizesNames.put(size.getName(),size);
@@ -129,35 +140,42 @@ public class ProductServiceImpl implements ProductService{
         }
         for(Size size:availableSizes){
             if(!existingSizesNames.containsKey(size.getName())){
-                updatedAvailableSizes.add(sizeService.addSize(size));
+                updatedAvailableSizes.add(sizeService.addSize(size)); // OPERATION 1
             }
-            else{
+            else{  // OPERATION 3
                 updatedAvailableSizes.add(sizeService.updateSize(size,existingSizesNames.get(size.getName()).getId()));
             }
         }
         return updatedAvailableSizes;
     }
 
-    private List<ProductDetail> updatedProductDetails(List<ProductDetail> productDetails, List<ProductDetail> existingProductDetails) {
+    private List<ProductDetail> updatedProductDetails(List<ProductDetail> newProductDetails, List<ProductDetail> existingProductDetails) {
+
+        /* OPERATIONS DONE -> 1) adding new ProductDetail,
+                              2) deleting mapped ProductDetail which is not present,
+                              3) updating existing ProductDetail
+         */
+
         List<ProductDetail> updatedProductDetails=new ArrayList<>();
         HashMap<String,ProductDetail> existingProductDetailNames=new HashMap<>();
         HashMap<String,ProductDetail> newProductDetailNames=new HashMap<>();
-        for(ProductDetail productDetail:productDetails)
+        for(ProductDetail productDetail:newProductDetails)
             newProductDetailNames.put(productDetail.getName(),productDetail);
         for(ProductDetail productDetail:existingProductDetails){
             if(!newProductDetailNames.containsKey(productDetail.getName())){
-                productDetailRepository.deleteById(productDetail.getId());
+                productDetailRepository.deleteById(productDetail.getId());  // OPERATION 2
             }
             else{
                 existingProductDetailNames.put(productDetail.getName(),productDetail);
             }
         }
-        for(ProductDetail productDetail:productDetails){
+        for(ProductDetail productDetail:newProductDetails){
             if(!existingProductDetailNames.containsKey(productDetail.getName())){
-                updatedProductDetails.add(productDetailRepository.save(productDetail));
+                updatedProductDetails.add(productDetailRepository.save(productDetail)); // OPERATION 1
             }
             else{
                 ProductDetail oldProductDetail=existingProductDetailNames.get(productDetail.getName());
+                // OPERATION 3
                 if(!oldProductDetail.getValue().equals(productDetail.getValue())){
                     oldProductDetail.setValue(productDetail.getValue());
                 }
@@ -285,7 +303,7 @@ public class ProductServiceImpl implements ProductService{
             productCode += value;
             existingProductCode.setValue(value);
         }
-        System.out.println(productCode);
+       // System.out.println(productCode);
         return productCode;
     }
 

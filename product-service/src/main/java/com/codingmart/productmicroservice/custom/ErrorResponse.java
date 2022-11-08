@@ -15,6 +15,6 @@ import java.util.List;
 public class ErrorResponse {
 
     private String message;
-    private String stackTrace;
+    private String debugMessage;
 
 }

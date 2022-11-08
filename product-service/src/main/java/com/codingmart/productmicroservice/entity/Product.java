@@ -25,6 +25,7 @@ public class Product extends Auditable<String> {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     @NotBlank(message = "Product name should be provided")
+    @Column(unique = true)
     private String name;
     @NotNull(message = "Price of the product should be provided")
     private Double price;
