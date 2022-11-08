@@ -1,22 +1,12 @@
 package com.codingmart.categorymicroservice.controller;
 
-import java.util.List;
-
-import com.codingmart.categorymicroservice.entity.SubCategory;
-import com.codingmart.categorymicroservice.repository.CategoryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.codingmart.categorymicroservice.entity.Category;
+import com.codingmart.categorymicroservice.entity.SubCategory;
 import com.codingmart.categorymicroservice.response.ApiResponse;
 import com.codingmart.categorymicroservice.service.CategoryService;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/categories")
@@ -67,12 +57,19 @@ public class CategoryController {
 		return categoryService.deleteCategory(id);
 	}
 	
-	@GetMapping("/getActiveCategoryById/{id}")
-	public ApiResponse getActiveCategoryById(@PathVariable long id){
-		return categoryService.getActiveCategoryById(id);
-	}
+//	@GetMapping("/getActiveCategoryById/{id}")
+//	public ApiResponse getActiveCategoryById(@PathVariable long id){
+//		return categoryService.getActiveCategoryById(id);
+//	}
 	@PostMapping("/{id}")
 	public ApiResponse saveSubCategoryForCategory(@RequestBody SubCategory subCategory,@PathVariable long id){
 		return categoryService.saveSubCategoryForCategory(subCategory,id);
 	}
+
+	@GetMapping("/active")
+	public ApiResponse getAllActiveCategory(){
+
+		return categoryService.getAllActiveCategories();
+	}
+
 }

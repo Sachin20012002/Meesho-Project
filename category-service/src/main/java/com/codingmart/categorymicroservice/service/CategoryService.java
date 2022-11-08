@@ -1,15 +1,17 @@
 package com.codingmart.categorymicroservice.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import com.codingmart.categorymicroservice.entity.Category;
 import com.codingmart.categorymicroservice.entity.SubCategory;
 import com.codingmart.categorymicroservice.repository.CategoryRepository;
 import com.codingmart.categorymicroservice.repository.SubCategoryRepository;
 import com.codingmart.categorymicroservice.response.ApiResponse;
+import com.codingmart.categorymicroservice.response.ErrorResponse;
 import com.codingmart.categorymicroservice.response.IdNotFound;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -32,7 +34,8 @@ public class CategoryService {
 			apiResponse.setData(categoryRepo.save(category));
 		}
 		else {
-			apiResponse.setError("Category already exist");
+
+			apiResponse.setError(new ErrorResponse("Category already exist","Avoid Duplicate entry"));
 		}
 		return apiResponse;
 	}
@@ -94,20 +97,20 @@ public class CategoryService {
 	}
 	
 	
-     public ApiResponse getActiveCategoryById(Long id){
-		 apiResponse.resetResponse();
-    	 if(categoryRepo.findById(id).isEmpty()) {
-			 throw new IdNotFound("Category Id not Found");
-		 }
-    	 boolean status=categoryRepo.getActiveCategoryById(id).isActive();
-    	if(status) {
-			apiResponse.setData(categoryRepo.getActiveCategoryById(id));
-		}
-    	 else {
-			apiResponse.setError("category is inactive ");
-		}
-    	 return apiResponse;
-     }
+//     public ApiResponse getActiveCategoryById(Long id){
+//		 apiResponse.resetResponse();
+//    	 if(categoryRepo.findById(id).isEmpty()) {
+//			 throw new IdNotFound("Category Id not Found");
+//		 }
+//    	 boolean status=categoryRepo.getActiveCategoryById(id).isActive();
+//    	if(status) {
+//			apiResponse.setData(categoryRepo.getActiveCategoryById(id));
+//		}
+//    	 else {
+//			apiResponse.setError(new ErrorResponse("Category already exist","Avoid Duplicate entry"));
+//		}
+//    	 return apiResponse;
+//     }
 
 	public ApiResponse saveSubCategoryForCategory(SubCategory subCategory, long id) {
 		apiResponse.resetResponse();
@@ -120,4 +123,15 @@ public class CategoryService {
 			throw new IdNotFound("Category Id not exist");
 		return  apiResponse;
 	}
+
+	public ApiResponse getAllActiveCategories() {
+		apiResponse.resetResponse();
+		List<Category> categories=categoryRepo.findAll();
+		List<Category> activeCategories=categories.stream().filter((category)-> category.isActive()).collect(Collectors.toList());
+		if(categories.isEmpty())
+			throw new IdNotFound("no Categories Present");
+		apiResponse.setData(activeCategories);
+		return apiResponse;
+	}
+
 }
