@@ -2,6 +2,8 @@ package com.codingmart.categorymicroservice.controller;
 
 import java.util.List;
 
+import com.codingmart.productmicroservice.entity.Product;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,16 +16,18 @@ import org.springframework.web.bind.annotation.RestController;
 import com.codingmart.categorymicroservice.entity.ChildCategory;
 import com.codingmart.categorymicroservice.response.ApiResponse;
 import com.codingmart.categorymicroservice.service.ChildCategoryService;
+import org.springframework.web.client.RestTemplate;
 
 @RestController
 @RequestMapping("/ChildCategories")
 public class ChildCategoryController {
 
-		private ChildCategoryService childCategoryService;
+		private final ChildCategoryService childCategoryService;
+		private final RestTemplate restTemplate;
 		
-		public ChildCategoryController(ChildCategoryService childCategoryService) {
+		public ChildCategoryController(ChildCategoryService childCategoryService, RestTemplate restTemplate) {
 			this.childCategoryService=childCategoryService;
-			
+			this.restTemplate = restTemplate;
 		}
 		
 		@PostMapping()
@@ -64,6 +68,15 @@ public class ChildCategoryController {
 	public ApiResponse getAllActiveChildCategory(){
 		return childCategoryService.getAllActiveChildCategory();
 	}
+
+	@GetMapping("/products/id")
+	public ApiResponse getAllProductsByChildCategoryId(@PathVariable("id") long id){
+		ResponseEntity<Product[]> productResponse=restTemplate.getForEntity("http://192.168.1.76:9191/meesho-productmicroservice/products/child-category/active/"+id,Product[].class);
+		Product[] products= productResponse.getBody();
+		return childCategoryService.getAllProductsByChildCategoryId(products);
+	}
+
+
 
 	}
         

@@ -50,9 +50,8 @@ public class ProductController {
          return genericResponse;
      }
     @GetMapping("/child-category/active/{id}")
-    public GenericResponse getAllActiveProductsByChildCategoryId(@PathVariable("id") Long id){
-        genericResponse.setData(productService.getAllActiveProductsByChildCategoryId(id));
-        return genericResponse;
+    public List<Product> getAllActiveProductsByChildCategoryId(@PathVariable("id") Long id){
+        return productService.getAllActiveProductsByChildCategoryId(id);
     }
     @GetMapping("")
     public GenericResponse getAllProducts(){

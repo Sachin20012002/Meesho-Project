@@ -20,7 +20,7 @@ import com.codingmart.categorymicroservice.service.SubCategoryService;
 @RequestMapping("/SubCategories")
 public class SubCategoryController {
 	
-	private SubCategoryService subCategoryService;
+	private final SubCategoryService subCategoryService;
 	
 	public SubCategoryController(SubCategoryService subCategoryService) {
 
@@ -68,4 +68,9 @@ public class SubCategoryController {
 	public ApiResponse saveChildCategoryForSubcategory(@RequestBody ChildCategory childCategory, @PathVariable long id){
 		return subCategoryService.saveChildCategoryForSubcategory(childCategory,id);
 	}
+
+//	@GetMapping("/products/{id}")
+//	public ApiResponse getAllProductsFromSubCategoryId(@PathVariable("id") long productId){
+//		subCategoryService.
+//	}
 }

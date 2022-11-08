@@ -6,6 +6,7 @@ import com.codingmart.categorymicroservice.repository.ChildCategoryRepository;
 import com.codingmart.categorymicroservice.response.ApiResponse;
 import com.codingmart.categorymicroservice.response.ErrorResponse;
 import com.codingmart.categorymicroservice.response.IdNotFound;
+import com.codingmart.productmicroservice.entity.Product;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -114,6 +115,12 @@ public class ChildCategoryService {
 		apiResponse.setData(activeChildCategories);
 		return apiResponse;
 
+	}
+
+	public ApiResponse getAllProductsByChildCategoryId(Product[] products) {
+		apiResponse.resetResponse();
+		apiResponse.setData(products);
+		return apiResponse;
 	}
 }
 
