@@ -85,8 +85,8 @@ public class ProductController {
      }
 */
    @GetMapping("/filter")
-    public List<Product> getAllProductsForFilterService(){
-       return productService.getAllProducts();
+    public List<Product> getAllActiveProductsForFilterService(){
+       return productService.getAllActiveProducts();
    }
 
 
