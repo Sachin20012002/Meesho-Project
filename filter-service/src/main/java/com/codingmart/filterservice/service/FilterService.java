@@ -1,7 +1,7 @@
 package com.codingmart.filterservice.service;
 
 import com.codingmart.productmicroservice.custom.GenericResponse;
-import com.codingmart.productmicroservice.entity.Brand;
+import com.codingmart.productmicroservice.entity.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,15 +37,15 @@ public class FilterService {
         return genericResponse;
     }
 
-    public GenericResponse getProductsByBrand(List<HashMap> products, String brandName) {
-        List<HashMap> filteredProducts = new ArrayList<>();
-        for (HashMap product : products) {
-            if (product.get("name").equals(brandName))
-                filteredProducts.add(product);
-        }
-        genericResponse.setData(filteredProducts);
-        return genericResponse;
-    }
+//    public GenericResponse getProductsByBrand(List<HashMap> products, String brandName) {
+//        List<HashMap> filteredProducts = new ArrayList<>();
+//        for (HashMap product : products) {
+//            if (product.get("name").equals(brandName))
+//                filteredProducts.add(product);
+//        }
+//        genericResponse.setData(filteredProducts);
+//        return genericResponse;
+//    }
 
 
     public GenericResponse getProductsByPrice(List<HashMap> products, Double price) {
@@ -58,4 +58,25 @@ public class FilterService {
         genericResponse.setData(filteredProducts);
         return genericResponse;
     }
+
+
+    public GenericResponse getProductsByBrand(Product[] products, String brandName){
+        List<Product> filteredProducts=new ArrayList<>();
+        for(Product product:products){
+//            System.out.println(product.getBrand().getName()+"-"+brandName);
+//            System.out.println(product.getBrand().getName().length()+"-"+brandName.length());
+            if(product.getBrand().getName().trim().equalsIgnoreCase(brandName.trim())) {
+                filteredProducts.add(product);
+            }
+        }
+        System.out.println(filteredProducts);
+        genericResponse.setData(filteredProducts);
+        return genericResponse;
+    }
+
+
+
+
+
+
 }
