@@ -4,6 +4,7 @@ package com.codingmart.categorymicroservice.service;
 import java.util.List;
 import java.util.Objects;
 
+import com.codingmart.categorymicroservice.entity.SubCategory;
 import com.codingmart.categorymicroservice.repository.ChildCategoryRepository;
 
 import org.springframework.stereotype.Service;
@@ -97,7 +98,18 @@ public class ChildCategoryService {
 			apiResponse.setData("Id "+ id +" Deleted Successfully");
 			 return apiResponse;
 		}
-		
+
+
+	public ApiResponse getAllChildCategoriesFromSubCategoryId(long id){
+		apiResponse.resetResponse();
+		if(childCategoryRepo.getAllChildCategoriesFromSubCategoryId(id).isEmpty()) {
+			throw new IdNotFound("No SubCategory found for the given Category Id");
+		}
+		List<ChildCategory> subCategoryList=childCategoryRepo.getAllChildCategoriesFromSubCategoryId(id);
+		apiResponse.setData(subCategoryList);
+
+		return apiResponse;
+	}
 	}
 
 

@@ -10,9 +10,9 @@ import com.codingmart.categorymicroservice.entity.SubCategory;
 
 public interface SubCategoryRepository extends JpaRepository<SubCategory, Long> {
 
-	@Query(value="select * from sub_category where category_id =:c",nativeQuery=true) 
+	@Query(value="select * from sub_category where category_id =:id",nativeQuery=true)
 	// get all childCategory inside this subcategory
-	 List<SubCategory> getAllSubCategoriesFromCategoryId(@Param("c") long id);
+	 List<SubCategory> getAllSubCategoriesFromCategoryId(@Param("id") long id);
 
 	
 	 SubCategory findByName(String name);

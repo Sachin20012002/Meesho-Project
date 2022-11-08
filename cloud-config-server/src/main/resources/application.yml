@@ -1,7 +1,7 @@
-server:
+ server:
   port: 9296
 
-spring:
+ spring:
   application:
     name: CONFIG-SERVER
   cloud:

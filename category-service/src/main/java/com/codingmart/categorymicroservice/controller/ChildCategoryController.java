@@ -54,5 +54,12 @@ public class ChildCategoryController {
 		public ApiResponse deleteChildCategory(@PathVariable long id) {
 			return childCategoryService.deleteChildCategory(id);
 		}
+
+		@GetMapping("/getAllChildCategoriesFromSubCategoryId/{id}")
+		public ApiResponse getAllChildCategoriesFromSubCategoryId(@PathVariable long id){
+		return childCategoryService.getAllChildCategoriesFromSubCategoryId(id);
+		}
+
+
 	}
         
