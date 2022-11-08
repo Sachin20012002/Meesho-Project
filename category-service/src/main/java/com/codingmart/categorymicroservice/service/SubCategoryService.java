@@ -1,6 +1,7 @@
 package com.codingmart.categorymicroservice.service;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -11,6 +12,7 @@ import com.codingmart.categorymicroservice.repository.SubCategoryRepository;
 import com.codingmart.categorymicroservice.response.ApiResponse;
 import com.codingmart.categorymicroservice.response.ErrorResponse;
 import com.codingmart.categorymicroservice.response.IdNotFound;
+import com.codingmart.productmicroservice.entity.Product;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,12 +22,14 @@ public class SubCategoryService
 	private final SubCategoryRepository subCategoryRepo;
 	private final ApiResponse apiResponse;
 	private final ChildCategoryRepository childCategoryRepo;
+	private final ChildCategoryService childCategoryService;
 
 	
-	public SubCategoryService(SubCategoryRepository subCategoryRepo,ApiResponse apiResponse,ChildCategoryRepository childCategoryRepo) {
+	public SubCategoryService(SubCategoryRepository subCategoryRepo, ApiResponse apiResponse, ChildCategoryRepository childCategoryRepo, ChildCategoryService childCategoryService) {
 		this.subCategoryRepo=subCategoryRepo;
 		this.apiResponse=apiResponse;
 		this.childCategoryRepo=childCategoryRepo;
+		this.childCategoryService = childCategoryService;
 	}
 	
 	public ApiResponse saveSubCategory(SubCategory subCategory) {
@@ -117,5 +121,16 @@ public class SubCategoryService
 			throw new  IdNotFound("Id not exist");
 		}
 		return  apiResponse;
+	}
+
+	public ApiResponse getAllProductsFromSubCategoryId(long id) {
+		List<ChildCategory> childCategories=((SubCategory)getSubCategoryById(id).getData()).getChildCategory();
+		List<Product> products=new ArrayList<>();
+		for (ChildCategory childCategory:childCategories){
+			products.add((Product) childCategoryService.getAllProductsByChildCategoryId(childCategory.getId()).getData());
+		}
+		apiResponse.resetResponse();
+		apiResponse.setData(products);
+		return apiResponse;
 	}
 }

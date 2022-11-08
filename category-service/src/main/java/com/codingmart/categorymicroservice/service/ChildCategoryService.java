@@ -7,7 +7,9 @@ import com.codingmart.categorymicroservice.response.ApiResponse;
 import com.codingmart.categorymicroservice.response.ErrorResponse;
 import com.codingmart.categorymicroservice.response.IdNotFound;
 import com.codingmart.productmicroservice.entity.Product;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Objects;
@@ -19,12 +21,14 @@ public class ChildCategoryService {
 
 		private final ChildCategoryRepository childCategoryRepo;
 		private final ApiResponse apiResponse;
+	    private final RestTemplate restTemplate;
 
 
 
-		public ChildCategoryService(ChildCategoryRepository childCategoryRepo,ApiResponse apiResponse) {
+		public ChildCategoryService(ChildCategoryRepository childCategoryRepo, ApiResponse apiResponse, RestTemplate restTemplate) {
 			this.childCategoryRepo=childCategoryRepo;
 			this.apiResponse=apiResponse;
+			this.restTemplate = restTemplate;
 		}
 		
 		public ApiResponse saveChildCategory(ChildCategory childCategory) {
@@ -117,7 +121,9 @@ public class ChildCategoryService {
 
 	}
 
-	public ApiResponse getAllProductsByChildCategoryId(Product[] products) {
+	public ApiResponse getAllProductsByChildCategoryId(long id) {
+		ResponseEntity<Product[]> productResponse=restTemplate.getForEntity("http://192.168.1.76:9191/meesho-productmicroservice/products/child-category/active/"+id,Product[].class);
+		Product[] products= productResponse.getBody();
 		apiResponse.resetResponse();
 		apiResponse.setData(products);
 		return apiResponse;

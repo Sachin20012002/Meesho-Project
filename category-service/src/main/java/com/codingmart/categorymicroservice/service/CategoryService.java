@@ -12,6 +12,7 @@ import com.codingmart.categorymicroservice.repository.SubCategoryRepository;
 import com.codingmart.categorymicroservice.response.ApiResponse;
 import com.codingmart.categorymicroservice.response.ErrorResponse;
 import com.codingmart.categorymicroservice.response.IdNotFound;
+import com.codingmart.productmicroservice.entity.Product;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,11 +21,13 @@ public class CategoryService {
 	private final CategoryRepository categoryRepo;
 	private final SubCategoryRepository subCategoryRepo;
 	private final ApiResponse apiResponse;
+	private final SubCategoryService subCategoryService;
 	
-	public CategoryService(CategoryRepository categoryRepo,ApiResponse apiResponse,SubCategoryRepository subCategoryRepo) {
+	public CategoryService(CategoryRepository categoryRepo, ApiResponse apiResponse, SubCategoryRepository subCategoryRepo, SubCategoryService subCategoryService) {
 		this.categoryRepo=categoryRepo;
 		this.apiResponse=apiResponse;
 		this.subCategoryRepo=subCategoryRepo;
+		this.subCategoryService = subCategoryService;
 	}
 	
 
@@ -138,4 +141,14 @@ public class CategoryService {
 		return apiResponse;
 	}
 
+    public ApiResponse getAllProductsFromCategoryId(long id) {
+		List<SubCategory> subCategories=((Category)getCategoryById(id).getData()).getSubCategory();
+		List<Product> products=new ArrayList<>();
+		for (SubCategory subCategory:subCategories){
+			products.add((Product) subCategoryService.getAllProductsFromSubCategoryId(subCategory.getId()).getData());
+		}
+		apiResponse.resetResponse();
+		apiResponse.setData(products);
+		return apiResponse;
+    }
 }

@@ -69,8 +69,8 @@ public class SubCategoryController {
 		return subCategoryService.saveChildCategoryForSubcategory(childCategory,id);
 	}
 
-//	@GetMapping("/products/{id}")
-//	public ApiResponse getAllProductsFromSubCategoryId(@PathVariable("id") long productId){
-//		subCategoryService.
-//	}
+	@GetMapping("/products/{id}")
+	public ApiResponse getAllProductsFromSubCategoryId(@PathVariable("id") long id){
+		return subCategoryService.getAllProductsFromSubCategoryId(id);
+	}
 }

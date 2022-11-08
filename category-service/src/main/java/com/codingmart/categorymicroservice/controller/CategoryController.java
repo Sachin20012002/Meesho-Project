@@ -71,5 +71,9 @@ public class CategoryController {
 
 		return categoryService.getAllActiveCategories();
 	}
+	@GetMapping("/products/{id}")
+	public ApiResponse getAllProductsFromCategoryId(@PathVariable("id") long id){
+		return categoryService.getAllProductsFromCategoryId(id);
+	}
 
 }
