@@ -10,12 +10,12 @@ spring:
         - id: PRODUCT-SERVICE
           uri: lb://PRODUCT-SERVICE
           predicates:
-            - Path=/meesho-productmicroservice/**
+            - Path=/meesho/product-microservice/**
         - id: CATEGORY-SERVICE
           uri: lb://CATEGORY-SERVICE
           predicates:
-            - Path=/meesho-categorymicroservice/**
+            - Path=/meesho/category-microservice/**
         - id: FILTER-SERVICE
           uri: lb://FILTER-SERVICE
           predicates:
-             - Path=/meesho-filtermicroservice/**
+             - Path=/meesho/filter-microservice/**

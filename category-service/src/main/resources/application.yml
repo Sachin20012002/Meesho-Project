@@ -1,11 +1,10 @@
 server:
     port: 9001
     servlet:
-        context-path: /meesho-categorymicroservice
+        context-path: /meesho/category-microservice
 spring:
     datasource:
         password: 12345678
-#        url: jdbc:mysql://localhost:3306/MeeshoApp
         url: jdbc:mysql://192.168.1.76:3306/MeeshoApp
         username: meesho
     jpa:

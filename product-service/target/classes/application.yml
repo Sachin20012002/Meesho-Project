@@ -4,8 +4,11 @@ logging:
         org:
             hibernate:
                 SQL: DEBUG
-        rg:
-            hibernatetype: TRACE
+                type:
+                    descriptor:
+                        sql:
+                            BasicBinder:
+                                TRACE
 server:
     port: 9002
     servlet:
@@ -31,4 +34,3 @@ spring:
         properties:
             hibernate:
                 dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-        show-sql: true
