@@ -122,7 +122,7 @@ public class ChildCategoryService {
 	}
 
 	public Product[] getAllProductsByChildCategoryId(long id) {
-		ResponseEntity<Product[]> productResponse=restTemplate.getForEntity("http://192.168.1.76:9191/meesho-productmicroservice/products/child-category/active/"+id,Product[].class);
+		ResponseEntity<Product[]> productResponse=restTemplate.getForEntity("http://192.168.1.76:9191/meesho/product-microservice/products/child-category/active/"+id,Product[].class);
 		return productResponse.getBody();
 
 	}

@@ -123,8 +123,16 @@ public class CategoryService {
 		apiResponse.resetResponse();
 		if(categoryRepo.findById(id).isPresent()) {
 			Category category = categoryRepo.findById(id).get();
-			category.getSubCategory().add(subCategoryRepo.save(subCategory));
-			apiResponse.setData(categoryRepo.save(category));
+			if(Objects.isNull(subCategoryRepo.findByName(subCategory.getName()))) {
+				category.getSubCategory().add(subCategoryRepo.save(subCategory));
+				apiResponse.setData(categoryRepo.save(category));
+			}
+			else {
+				apiResponse.setError(new ErrorResponse("SubCategory already exist","Avoid Duplicate entry"));
+
+			}
+//			category.getSubCategory().add(subCategoryRepo.save(subCategory));
+//			apiResponse.setData(categoryRepo.save(category));
 			}
 		else
 			throw new IdNotFound("Category Id not exist");
@@ -142,6 +150,7 @@ public class CategoryService {
 	}
 
     public List<Product> getAllProductsFromCategoryId(long id) {
+		apiResponse.resetResponse();
 		List<SubCategory> subCategories=((Category)getCategoryById(id).getData()).getSubCategory();
 		List<Product> products=new ArrayList<>();
 		for (SubCategory subCategory:subCategories){

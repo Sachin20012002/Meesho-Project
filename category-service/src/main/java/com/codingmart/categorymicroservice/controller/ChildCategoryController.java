@@ -61,9 +61,9 @@ public class ChildCategoryController {
 
 		@GetMapping("/products/{id}")
 		public ApiResponse getAllProductsByChildCategoryId(@PathVariable("id") long id){
-
-		apiResponse.setData(childCategoryService.getAllProductsByChildCategoryId(id));
-		return apiResponse;
+			apiResponse.resetResponse();
+			apiResponse.setData(childCategoryService.getAllProductsByChildCategoryId(id));
+			return apiResponse;
 		}
 	}
         

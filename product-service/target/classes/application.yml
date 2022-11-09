@@ -3,16 +3,16 @@ logging:
     level:
         org:
             hibernate:
-                SQL: DEBUG
+                SQL: DEBUG     #logs the sql statements
                 type:
                     descriptor:
                         sql:
                             BasicBinder:
-                                TRACE
+                                TRACE       #logs the parameters passed to preparedStatement
 server:
     port: 9002
     servlet:
-        context-path: /meesho-productmicroservice
+        context-path: /meesho/product-microservice
 
 spring:
     application:

@@ -115,8 +115,17 @@ public class SubCategoryService
 		apiResponse.resetResponse();
 		if(subCategoryRepo.findById(id).isPresent()) {
 			SubCategory subCategory = subCategoryRepo.findById(id).get();
-			subCategory.getChildCategory().add(childCategoryRepo.save(childCategory));
-			apiResponse.setData(subCategoryRepo.save(subCategory));
+
+			if(Objects.isNull(childCategoryRepo.findByName(childCategory.getName()))) {
+				subCategory.getChildCategory().add(childCategoryRepo.save(childCategory));
+				apiResponse.setData(subCategoryRepo.save(subCategory));
+			}
+			else {
+				apiResponse.setError(new ErrorResponse("ChildCategory already Exist","Avoid Duplicate Entry"));
+			}
+
+//			subCategory.getChildCategory().add(childCategoryRepo.save(childCategory));
+//			apiResponse.setData(subCategoryRepo.save(subCategory));
 		}
 		else{
 			throw new  IdNotFound("Id not exist");

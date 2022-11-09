@@ -73,6 +73,7 @@ public class SubCategoryController {
 
 	@GetMapping("/products/{id}")
 	public ApiResponse getAllProductsFromSubCategoryId(@PathVariable("id") long id){
+		apiResponse.resetResponse();
 		apiResponse.setData(subCategoryService.getAllProductsFromSubCategoryId(id));
 		return apiResponse;
 	}

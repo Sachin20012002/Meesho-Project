@@ -75,6 +75,7 @@ public class CategoryController {
 	}
 	@GetMapping("/products/{id}")
 	public ApiResponse getAllProductsFromCategoryId(@PathVariable("id") long id){
+		apiResponse.resetResponse();
 		apiResponse.setData(categoryService.getAllProductsFromCategoryId(id));
 		return apiResponse;
 	}
