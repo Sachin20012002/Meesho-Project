@@ -51,7 +51,7 @@ public class FilterController {
     }
 
     public Product[] getProductsThroughRestTemplate(){
-        ResponseEntity<Product[]> productResponse= restTemplate.getForEntity("http://192.168.1.76:9191/meesho-productmicroservice/products/filter",Product[].class);
+        ResponseEntity<Product[]> productResponse= restTemplate.getForEntity("http://192.168.1.76:9191/meesho/product-microservice/products/filter",Product[].class);
         return productResponse.getBody();
     }
 

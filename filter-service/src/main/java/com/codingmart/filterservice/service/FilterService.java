@@ -19,6 +19,7 @@ public class FilterService {
     }
 
     public GenericResponse getProductsByColor(Product[] products, String color) {
+        System.out.println(color);
         List<Product> filteredProducts = new ArrayList<>();
        for(Product product:products){
             if(product.getColor().equals(color)){
@@ -51,7 +52,9 @@ public class FilterService {
     }
 
 
+
     public GenericResponse getProductsByBrand(Product[] products, String brandName){
+        System.out.println(brandName);
         List<Product> filteredProducts=new ArrayList<>();
         for(Product product:products) {
             if (product.getBrand().getName().trim().equalsIgnoreCase(brandName.trim())) {
