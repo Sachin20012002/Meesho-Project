@@ -17,7 +17,6 @@ import java.util.Objects;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class Discount extends Auditable<String> {
 
     @Id
@@ -32,9 +31,6 @@ public class Discount extends Auditable<String> {
     @NotNull(message = "Provide active status")
     private Boolean active;
 
-//    @JsonIgnore
-//    @OneToOne(mappedBy = "discount")
-//    private Product product;
 
     @Override
     public boolean equals(Object o) {

@@ -18,7 +18,6 @@ import java.util.Objects;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class Tax extends Auditable<String> {
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)

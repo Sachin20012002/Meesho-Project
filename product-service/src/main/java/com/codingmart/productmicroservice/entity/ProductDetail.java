@@ -2,9 +2,11 @@ package com.codingmart.productmicroservice.entity;
 
 import com.codingmart.productmicroservice.audit.Auditable;
 import lombok.*;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 
 @Entity
@@ -13,8 +15,6 @@ import javax.validation.constraints.NotBlank;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-@EntityListeners(AuditingEntityListener.class)
 public class ProductDetail extends Auditable<String> {
 
     @Id

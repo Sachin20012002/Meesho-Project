@@ -21,7 +21,6 @@ import java.util.Objects;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class Size extends Auditable<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

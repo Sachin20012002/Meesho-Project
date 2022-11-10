@@ -3,7 +3,6 @@ package com.codingmart.productmicroservice.entity;
 import com.codingmart.productmicroservice.audit.Auditable;
 import lombok.*;
 import org.hibernate.Hibernate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -19,7 +18,6 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@EntityListeners(AuditingEntityListener.class)
 public class Product extends Auditable<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -33,7 +31,6 @@ public class Product extends Auditable<String> {
     private Double finalDiscountedPrice; // price - discounts
     @PositiveOrZero(message = "quantity must not be negative")
     private Long quantity;
-    //doubt
     private String code;
     private String color;
     private String description;

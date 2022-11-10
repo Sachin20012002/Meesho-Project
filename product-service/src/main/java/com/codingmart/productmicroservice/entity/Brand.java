@@ -14,8 +14,6 @@ import javax.validation.constraints.NotNull;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-
 public class Brand extends Auditable<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

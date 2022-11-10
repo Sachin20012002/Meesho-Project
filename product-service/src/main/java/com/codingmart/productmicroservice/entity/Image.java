@@ -15,7 +15,6 @@ import javax.validation.constraints.NotNull;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class Image extends Auditable<String> {
 
     @Id

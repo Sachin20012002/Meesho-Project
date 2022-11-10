@@ -308,7 +308,7 @@ public class ProductServiceImpl implements ProductService{
             if(Objects.isNull(taxRepository.findByName(tax.getName())))
                 taxService.addTax(tax);
             else
-                taxService.updateTax(tax,tax.getId());
+                taxService.updateTax(tax,taxRepository.findByName(tax.getName()).getId());
             productTaxes.add(taxRepository.findByName(tax.getName()));
         }
         return productTaxes;
@@ -323,24 +323,26 @@ public class ProductServiceImpl implements ProductService{
             typeService.addType(type);
         }
         else {
-            typeService.updateType(type, type.getId());
+            typeService.updateType(type, typeRepository.findByName(type.getName()).getId());
         }
         return typeRepository.findByName(type.getName());
     }
+
 
     /**
      *  This method saves the new brand and updates the existing brand
      * @return updated Brand
      */
-    private Brand updateAndSaveBrand(Brand brand) {
+    public Brand updateAndSaveBrand(Brand brand) {
         if (Objects.isNull(brandRepository.findByName(brand.getName()))) {
             brandService.addBrand(brand);
         }
         else{
-            brandService.updateBrand(brand,brand.getId());
+            brandService.updateBrand(brand,brandRepository.findByName(brand.getName()).getId());
         }
         return brandRepository.findByName(brand.getName());
     }
+
 
 
     /**
@@ -352,7 +354,7 @@ public class ProductServiceImpl implements ProductService{
             if (Objects.isNull(discountRepository.findByName(discount.getName())))
                 discountService.addDiscount(discount);
             else
-                discountService.updateDiscount(discount,discount.getId());
+                discountService.updateDiscount(discount,discountRepository.findByName(discount.getName()).getId());
             return discountRepository.findByName(discount.getName());
         }
         return null;

@@ -14,7 +14,6 @@ import javax.validation.constraints.NotNull;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Table(name = "product_type")
 public class Type extends Auditable<String> {
 
