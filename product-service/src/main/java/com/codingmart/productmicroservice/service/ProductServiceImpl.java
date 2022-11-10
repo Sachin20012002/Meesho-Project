@@ -23,10 +23,14 @@ public class ProductServiceImpl implements ProductService{
     private final ImageService imageService;
     private final SizeService sizeService;
     private final ProductCodeRepository productCodeRepository;
+    private final TaxService taxService;
+    private final TypeService typeService;
+    private final BrandService brandService;
+    private final DiscountService discountService;
 
 
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository, TaxRepository taxRepository, BrandRepository brandRepository, TypeRepository typeRepository, DiscountRepository discountRepository, ProductDetailRepository productDetailRepository, ImageService imageService, SizeService sizeService, ProductCodeRepository productCodeRepository){
+    public ProductServiceImpl(ProductRepository productRepository, TaxRepository taxRepository, BrandRepository brandRepository, TypeRepository typeRepository, DiscountRepository discountRepository, ProductDetailRepository productDetailRepository, ImageService imageService, SizeService sizeService, ProductCodeRepository productCodeRepository, TaxService taxService, TypeService typeService, BrandService brandService, DiscountService discountService){
         this.productRepository=productRepository;
         this.taxRepository = taxRepository;
         this.brandRepository = brandRepository;
@@ -36,6 +40,10 @@ public class ProductServiceImpl implements ProductService{
         this.imageService = imageService;
         this.sizeService = sizeService;
         this.productCodeRepository = productCodeRepository;
+        this.taxService = taxService;
+        this.typeService = typeService;
+        this.brandService = brandService;
+        this.discountService = discountService;
     }
 
 
@@ -89,12 +97,17 @@ public class ProductServiceImpl implements ProductService{
 
     }
 
+    /**
+     *
+     * @param images - the new set of images provided for update
+     * @param existingImages - set of images which were already assigned to the product
+     * @return - returns a new set of updated images to assign it to the product after
+     *           performing the below operations.
+     *           OPERATIONS DONE -> 1) adding new images,
+     *                               2) deleting mapped images which is not present,
+     *                               3) updating existing images
+     */
     private List<Image> updatedImages(List<Image> images, List<Image> existingImages) {
-
-        /* OPERATIONS DONE -> 1) adding new images,
-                              2) deleting mapped images which is not present,
-                              3) updating existing images
-         */
 
         List<Image> updatedImages=new ArrayList<>();
         HashMap<String,Image> existingImageNames=new HashMap<>();
@@ -118,12 +131,18 @@ public class ProductServiceImpl implements ProductService{
         return updatedImages;
     }
 
-    private List<Size> updatedAvailableSizes(List<Size> availableSizes, List<Size> existingAvailableSizes) {
 
-        /* OPERATIONS DONE -> 1) adding new sizes,
-                              2) deleting mapped sizes which is not present,
-                              3) updating existing sizes
-         */
+    /**
+     *
+     * @param availableSizes - the new set of sizes provided for update
+     * @param existingAvailableSizes - set of sizes which were already assigned to the product
+     * @return - returns a new set of updated sizes to assign it to the product after
+     *           performing the below operations.
+     *           OPERATIONS DONE -> 1) adding new sizes,
+     *                               2) deleting mapped sizes which is not present,
+     *                               3) updating existing sizes
+     */
+    private List<Size> updatedAvailableSizes(List<Size> availableSizes, List<Size> existingAvailableSizes) {
 
         List<Size> updatedAvailableSizes=new ArrayList<>();
         HashMap<String,Size> existingSizesNames=new HashMap<>();
@@ -149,12 +168,17 @@ public class ProductServiceImpl implements ProductService{
         return updatedAvailableSizes;
     }
 
+    /**
+     *
+     * @param newProductDetails - the new set of ProductDetails provided for update
+     * @param existingProductDetails - set of ProductDetails which were already assigned to the product
+     * @return - returns a new set of updated sizes to assign it to the product after
+     *           performing the below operations.
+     *           OPERATIONS DONE -> 1) adding new ProductDetail,
+     *                               2) deleting mapped ProductDetail which is not present,
+     *                               3) updating existing ProductDetail
+     */
     private List<ProductDetail> updatedProductDetails(List<ProductDetail> newProductDetails, List<ProductDetail> existingProductDetails) {
-
-        /* OPERATIONS DONE -> 1) adding new ProductDetail,
-                              2) deleting mapped ProductDetail which is not present,
-                              3) updating existing ProductDetail
-         */
 
         List<ProductDetail> updatedProductDetails=new ArrayList<>();
         HashMap<String,ProductDetail> existingProductDetailNames=new HashMap<>();
@@ -228,6 +252,12 @@ public class ProductServiceImpl implements ProductService{
         return productRepository.findAllByActiveAndChildCategoryId(true,id);
     }
 
+    /**
+     * This method calculates total quantity of the product by the summation
+     *          of the quantities of each size.
+     * @param availableSizes - details of the sizes assigned to the product
+     * @return quantity of the product.
+     */
     private Long calculateTotalQuantityFromSizes(List<Size> availableSizes) {
         Long quantity=0L;
         for(Size i:availableSizes){
@@ -236,6 +266,13 @@ public class ProductServiceImpl implements ProductService{
         return quantity;
     }
 
+    /**
+     * This method calculates the MRP of the product by adding the TAX to the product price
+     *
+     * @param taxes - tax details of the product
+     * @param price - price of the product
+     * @return MRP of the product
+     */
     private Double calculateMaximumRetailPrice(List<Tax> taxes, Double price) {
         Double maximumRetailPrice=price;
         for(Tax i:taxes) {
@@ -244,6 +281,15 @@ public class ProductServiceImpl implements ProductService{
         return maximumRetailPrice;
     }
 
+
+    /**
+     * This method calculates the final discounted Price of the product by
+     *   reducing the discount price in the product price
+     *
+     * @param discount - discount details of the product
+     * @param price - price of the product
+     * @return final discounted Price of the product
+     */
     private Double calculateFinalDiscountedPrice(Discount discount, Double price) {
         if(Objects.isNull(discount) || !discount.getActive()){
             return price;
@@ -251,43 +297,86 @@ public class ProductServiceImpl implements ProductService{
         return price-(price*discount.getPercent()/100.0);
     }
 
+    /**
+     *  This method saves the new Tax and updates the existing Tax
+     * @return List of updated Taxes
+     */
+
     private List<Tax> updateAndSaveTaxes(List<Tax> taxes) {
         List<Tax> productTaxes=new ArrayList<>();
-        for(Tax i:taxes){
-            if(Objects.isNull(taxRepository.findByName(i.getName())))
-                taxRepository.save(i);
-            productTaxes.add(taxRepository.findByName(i.getName()));
+        for(Tax tax:taxes){
+            if(Objects.isNull(taxRepository.findByName(tax.getName())))
+                taxService.addTax(tax);
+            else
+                taxService.updateTax(tax,tax.getId());
+            productTaxes.add(taxRepository.findByName(tax.getName()));
         }
         return productTaxes;
     }
 
+    /**
+     *  This method saves the new Type and updates the existing Type
+     * @return updated Type
+     */
     private Type updateAndSaveType(Type type) {
         if(Objects.isNull(typeRepository.findByName(type.getName()))) {
-            type.setCode(new TypeCode());
-            typeRepository.save(type);
+            typeService.addType(type);
+        }
+        else {
+            typeService.updateType(type, type.getId());
         }
         return typeRepository.findByName(type.getName());
     }
 
+    /**
+     *  This method saves the new brand and updates the existing brand
+     * @return updated Brand
+     */
     private Brand updateAndSaveBrand(Brand brand) {
         if (Objects.isNull(brandRepository.findByName(brand.getName()))) {
-            brand.setCode(new BrandCode());
-            brandRepository.save(brand);
+            brandService.addBrand(brand);
+        }
+        else{
+            brandService.updateBrand(brand,brand.getId());
         }
         return brandRepository.findByName(brand.getName());
     }
 
+
+    /**
+     *  This method saves the new Discount and updates the existing Discount
+     * @return  updated Discount
+     */
     private Discount updateAndSaveDiscount(Discount discount) {
         if (Objects.nonNull(discount)) {
             if (Objects.isNull(discountRepository.findByName(discount.getName())))
-                discountRepository.save(discount);
+                discountService.addDiscount(discount);
+            else
+                discountService.updateDiscount(discount,discount.getId());
             return discountRepository.findByName(discount.getName());
         }
         return null;
     }
 
 
-
+    /**
+     * This method generates the unique product code
+     *  ALGORITHM -> 1) get the brand code
+     *               2) get the type code
+     *               3) check whether the combination of brand and type already exists
+     *               4) if exists increment the value of that combination and
+     *                   assign it as Product code
+     *               5) else add that combination and initialise a new value
+     *                  and assign it as Product code
+     *
+     * EXAMPLE -> 1) Product1 with brand "AAA" and Type "CCC" = product code ( B50T50-1 )
+     *                       where brandCode-50 and TypeCode-50
+     *            2) Product2 with same brand and same type = product code ( B50T50-2 )
+     *            3) Product3 with same brand and different type = product code ( B50T51-1 )
+     *            4) Product4 with different brand and same type = product code ( B51T50-1 )
+     *            5) Product5 with different brand and different type = product code ( B51T51-1 )
+     * @return - Product code
+     */
 
     private String generateProductCode(Product product) {
         String brandCode= String.valueOf(product.getBrand().getCode().getId());
@@ -303,10 +392,15 @@ public class ProductServiceImpl implements ProductService{
             productCode += value;
             existingProductCode.setValue(value);
         }
-       // System.out.println(productCode);
         return productCode;
     }
 
+
+    /**
+     * This method saves all the transient aggregated objects of the Product
+     * @param product - the product which was sent by from the front end
+     * @param resultantProduct - the product which will be saved to the DB
+     */
     private void updateAndSaveTransientObjects(Product product,Product resultantProduct) {
          /* Regarding builder : did not use it, as we are only setting some attributes which need
                                 to be saved before saving the product. If we use builder we have
