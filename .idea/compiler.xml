@@ -10,6 +10,7 @@
         <module name="product-microservice" />
         <module name="category-service" />
         <module name="cloud-config-server" />
+        <module name="ecommerce_cartlist" />
         <module name="filter-service" />
         <module name="category-microservice" />
         <module name="cloud-gateway" />
@@ -28,6 +29,7 @@
       <module name="category-service" options="-parameters" />
       <module name="cloud-config-server" options="-parameters" />
       <module name="cloud-gateway" options="-parameters" />
+      <module name="ecommerce_cartlist" options="-parameters" />
       <module name="filter-microservice" options="-parameters" />
       <module name="filter-service" options="-parameters" />
       <module name="product-microservice" options="-parameters" />

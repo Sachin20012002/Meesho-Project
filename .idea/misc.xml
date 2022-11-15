@@ -12,10 +12,11 @@
         <option value="$PROJECT_DIR$/service-registry/pom.xml" />
         <option value="$PROJECT_DIR$/cloud-config-server/pom.xml" />
         <option value="$PROJECT_DIR$/category-service/pom.xml" />
+        <option value="$PROJECT_DIR$/ecommerce_cartlist/pom.xml" />
       </list>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_18" default="true" project-jdk-name="openjdk-18" project-jdk-type="JavaSDK" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="17" project-jdk-type="JavaSDK" />
   <component name="ProjectType">
     <option name="id" value="jpab" />
   </component>
