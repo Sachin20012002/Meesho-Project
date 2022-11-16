@@ -5,3 +5,49 @@ server:
 spring:
     application:
         name: FILTER-SERVICE
+
+management:
+    health:
+        circuitbreakers:
+            enabled: true
+    endpoints:
+        web:
+            exposure:
+                include: health
+    endpoint:
+        health:
+            show-details: always
+
+resilience4j:
+    circuitbreaker:
+        circuit-breaker-aspect-order: 1
+        instances:
+            FILTER_SERVICE:
+                registerHealthIndicator: true
+                eventConsumerBufferSize: 10 # number of requests it stores before it evaluates threshold
+                failureRateThreshold: 50    # 50% of the request is the threshold limit
+                minimumNumberOfCalls: 5   # no. of requests after which failure rate is calculated
+                automaticTransitionFromOpenToHalfOpenEnabled: true
+                waitDurationInOpenState: 5s
+                permittedNumberOfCallsInHalfOpenState: 3
+                slidingWindowSize: 10  # number of requests it accounts for failureRateThreshold calculation
+                slidingWindowType: COUNT_BASED
+    retry:
+        retry-aspect-order: 2
+        instances:
+            FILTER_SERVICE:
+                registerHealthIndicator: true
+                maxRetryAttempts: 3
+                waitDuration: 5s
+                enable-exponential-backoff: true
+                exponential-backoff-multiplier: 2
+                retry-exceptions:
+                    - org.springframework.web.client.RestClientException
+
+    ratelimiter:
+        instances:
+            FILTER_SERVICE:
+                registerHealthIndicator: false
+                limitForPeriod: 10       # 10 requests
+                limitRefreshPeriod: 10s   # In 10 seconds
+                timeoutDuration: 3s      # if more than 10 requests hits, then 3sec time out will happen

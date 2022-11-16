@@ -18,15 +18,15 @@ spring:
     application:
         name: PRODUCT-SERVICE
 
-    datasource:
-        password: 12345678
-        url: jdbc:mysql://192.168.1.76:3306/Product-Microservice
-        username: meesho
-
 #    datasource:
-#        password: password
-#        url: jdbc:mysql://localhost:3306/Product-Microservice
-#        username: root
+#        password: 12345678
+#        url: jdbc:mysql://192.168.1.76:3306/Product-Microservice
+#        username: meesho
+
+    datasource:
+        password: password
+        url: jdbc:mysql://localhost:3306/Product-Microservice
+        username: root
 
     jpa:
         hibernate:
