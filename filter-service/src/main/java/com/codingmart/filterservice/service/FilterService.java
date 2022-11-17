@@ -1,8 +1,6 @@
 package com.codingmart.filterservice.service;
 
-import com.codingmart.productmicroservice.custom.GenericResponse;
 import com.codingmart.productmicroservice.entity.Product;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -11,49 +9,30 @@ import java.util.List;
 @Service
 public class FilterService {
 
-    private final GenericResponse genericResponse;
-
-    @Autowired
-    public FilterService(GenericResponse genericResponse) {
-        this.genericResponse = genericResponse;
-    }
-
-    public GenericResponse getProductsByColor(Product[] products, String color) {
-        System.out.println(color);
+    public List<Product> getProductsByColor(List<Product> products, String color) {
         List<Product> filteredProducts = new ArrayList<>();
        for(Product product:products){
             if(product.getColor().equals(color)){
                 filteredProducts.add(product);
             }
         }
-        genericResponse.setData(filteredProducts);
-        return genericResponse;
+       return filteredProducts;
     }
 
-//    public GenericResponse getProductsByBrand(List<HashMap> products, String brandName) {
-//        List<HashMap> filteredProducts = new ArrayList<>();
-//        for (HashMap product : products) {
-//            if (product.get("name").equals(brandName))
-//                filteredProducts.add(product);
-//        }
-//        genericResponse.setData(filteredProducts);
-//        return genericResponse;
-//    }
 
-
-    public GenericResponse getProductsByPrice(Product[] products, Double price) {
+    public List<Product> getProductsByPrice(List<Product> products, Double price) {
         List<Product> filteredProducts = new ArrayList<>();
         for (Product product : products) {
             if (product.getPrice() < price)
                 filteredProducts.add(product);
         }
-        genericResponse.setData(filteredProducts);
-        return genericResponse;
+
+        return filteredProducts;
     }
 
 
 
-    public GenericResponse getProductsByBrand(Product[] products, String brandName){
+    public List<Product> getProductsByBrand(List<Product> products, String brandName){
         System.out.println(brandName);
         List<Product> filteredProducts=new ArrayList<>();
         for(Product product:products) {
@@ -61,8 +40,7 @@ public class FilterService {
                 filteredProducts.add(product);
             }
         }
-        genericResponse.setData(filteredProducts);
-        return genericResponse;
+        return filteredProducts;
     }
 
 

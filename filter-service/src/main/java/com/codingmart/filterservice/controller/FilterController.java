@@ -8,12 +8,16 @@ import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
+import java.util.Objects;
 
 
 @RestController
@@ -21,12 +25,14 @@ import org.springframework.web.client.RestTemplate;
 public class FilterController {
 
     private final RestTemplate restTemplate;
+    private final GenericResponse<List<Product>> genericResponse;
 
     private final FilterService filterService;
 
     @Autowired
-    public FilterController(RestTemplate restTemplate, FilterService filterService) {
+    public FilterController(RestTemplate restTemplate, GenericResponse<List<Product>> genericResponse, FilterService filterService) {
         this.restTemplate = restTemplate;
+        this.genericResponse = genericResponse;
         this.filterService = filterService;
     }
 
@@ -35,43 +41,39 @@ public class FilterController {
     @CircuitBreaker(name = "FILTER_SERVICE",fallbackMethod = "filterServiceFallBack")
     @Retry(name = "FILTER_SERVICE")
     @RateLimiter(name = "FILTER_SERVICE")
-   public GenericResponse getProductsByColor(@PathVariable("color") String color){
-       return filterService.getProductsByColor(getProductsThroughRestTemplate(),color);
+   public GenericResponse<List<Product>> getProductsByColor(@PathVariable("color") String color){
+       genericResponse.setData(filterService.getProductsByColor(getProductsThroughRestTemplate(),color));
+       return genericResponse;
     }
-
-//    @GetMapping("/brand1/{brandName}")
-//    public GenericResponse getProductsByBrand1(@PathVariable("brandName") String brandName){
-//        GenericResponse genericRequest= restTemplate.getForObject("http://sachin-latitude-3520:9191/meesho/product-microservice/products",GenericResponse.class);
-//        List<Product> products= (List<Product>) genericRequest.getData();
-//        System.out.println(products.get(0).getBrand().getName());
-//       // return filterService.getProductsByBrand(products,brandName);
-//        return new GenericResponse();
-//    }
-
     @GetMapping("/price/{price}")
     @CircuitBreaker(name = "FILTER_SERVICE",fallbackMethod = "filterServiceFallBack")
     @Retry(name = "FILTER_SERVICE")
     @RateLimiter(name = "FILTER_SERVICE")
-    public GenericResponse getProductsByPrice(@PathVariable("price") Double price){
-        return filterService.getProductsByPrice(getProductsThroughRestTemplate(),price);
+    public GenericResponse<List<Product>> getProductsByPrice(@PathVariable("price") Double price){
+        genericResponse.setData(filterService.getProductsByPrice(getProductsThroughRestTemplate(),price));
+        return genericResponse;
     }
 
     @GetMapping("/brand/{brandName}")
     @CircuitBreaker(name = "FILTER_SERVICE",fallbackMethod = "filterServiceFallBack")
     @Retry(name = "FILTER_SERVICE")
     @RateLimiter(name = "FILTER_SERVICE")
-    public GenericResponse getProductsByBrand(@PathVariable("brandName") String brandName){
-        return filterService.getProductsByBrand(getProductsThroughRestTemplate(),brandName);
+    public GenericResponse<List<Product>> getProductsByBrand(@PathVariable("brandName") String brandName){
+        genericResponse.setData(filterService.getProductsByBrand(getProductsThroughRestTemplate(),brandName));
+        return genericResponse;
     }
 
 
-    public Product[] getProductsThroughRestTemplate(){
-        ResponseEntity<Product[]> productResponse= restTemplate.getForEntity("http://localhost:9191/meesho/product-microservice/products/filter",Product[].class);
-        return productResponse.getBody();
+    public List<Product> getProductsThroughRestTemplate(){
+        return Objects.requireNonNull(restTemplate.exchange("http://sachin-latitude-3520:9191/meesho/product-microservice/products",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<GenericResponse<List<Product>>>() {
+                }).getBody()).getData();
     }
 
-    public GenericResponse filterServiceFallBack(Exception e){
-        GenericResponse genericResponse=new GenericResponse();
+    public GenericResponse<String> filterServiceFallBack(Exception ignoredE){
+        GenericResponse<String> genericResponse=new GenericResponse<>();
         genericResponse.setData("Please try again later");
         return genericResponse;
     }

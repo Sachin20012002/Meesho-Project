@@ -8,10 +8,10 @@ import org.springframework.stereotype.Component;
 @Getter
 @Setter
 @Component
-public class GenericResponse {
+public class GenericResponse<T> {
         private Integer code;
         private HttpStatus status;
-        private Object data;
+        private T data;
         private ErrorResponse error;
 
         public GenericResponse() {
